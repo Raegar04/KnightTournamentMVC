@@ -1,0 +1,27 @@
+﻿@using KnightTournament.ViewModels;
+@model TournamentDetailsViewModel;
+
+<form method="post" asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Name">Title</label>
+        <input asp-for="Name" class="form-control" placeholder="Enter title">
+    </div><br>
+    <div class="form-group">
+        <label asp-for="Description">Description</label>
+        <textarea asp-for ="Description" class="form-control" placeholder="Description"></textarea>
+    </div><br>
+    <div class="form-group">
+        <label asp-for="Scope">Scope</label>
+        <input asp-for="Scope" class="form-control" placeholder="Scope">
+    </div><br> 
+    <div class="form-group">
+        <label asp-for="StartDate">Start Date</label> 
+        <input asp-for="StartDate" class="form-control" placeholder="Start Date">
+    </div><br>
+    @if (Model.ErrorMessage is not null)
+    {
+        <p>@Model.ErrorMessage</p>
+        <br>
+    }
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

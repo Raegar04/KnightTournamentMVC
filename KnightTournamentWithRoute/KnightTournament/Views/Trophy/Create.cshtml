@@ -1,0 +1,22 @@
+﻿@using KnightTournament.ViewModels;
+@model TrophyDetailsViewModel;
+
+@{
+    var creatingError = ViewBag.TrophyAddingError;
+}
+
+<form method="post" asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input asp-for="Name" class="form-control" placeholder="Enter Name">
+    </div><br>
+    <div class="form-group">
+        <label asp-for="Value">Value</label>
+        <input type="number" asp-for="Value" class="form-control" placeholder="Value">
+    </div><br>
+    <input type="hidden" asp-for="RoundId" value="@Model.RoundId"/>
+    <br />
+    <p class="text-danger">@creatingError</p>
+    <br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

@@ -1,0 +1,29 @@
+﻿@using KnightTournament.ViewModels;
+@model RoundDetailsViewModel;
+
+<form method="post" asp-action="Update" asp-controller="Round">
+    <div class="form-group">
+        <label asp-for="Name">Title</label>
+        <input asp-for="Name" class="form-control" placeholder="@Model.Name">
+    </div><br>
+    <div class="form-group">
+        <label asp-for="Description">Description</label>
+        <input asp-for="Description" class="form-control" placeholder="@Model.Description">
+    </div><br>
+    <div class="form-group">
+        <label asp-for="StartDate">Start Date</label> 
+        <input asp-for="StartDate" class="form-control" placeholder="@Model.StartDate">
+    </div><br>
+    <div class="form-group">
+        <label asp-for="EndDate">End Date</label>
+        <input asp-for="EndDate" class="form-control" placeholder="@Model.EndDate">
+    </div><br>
+    @if (Model.ErrorMessage is not null)
+    {
+        <p>@Model.ErrorMessage</p>
+        <br>
+    }
+    <input asp-for="Id" type="hidden" value="@Model.Id" />
+    <input asp-for="TournamentId" type="hidden" value="@Model.TournamentId" />
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

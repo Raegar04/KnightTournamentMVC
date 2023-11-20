@@ -1,0 +1,27 @@
+﻿@using KnightTournament.Models.Enums;
+@using KnightTournament.ViewModels;
+@model CombatDetailsViewModel;
+
+<form method="post" asp-action="Create" asp-controller="Combat">
+    <div class="form-group">
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Type"></label>
+        <select asp-for="Type" asp-items="Html.GetEnumSelectList<CombatType>()" class="form-control">
+            <option value="">Select Combat Type</option>
+        </select>
+    </div>
+    @if (Model.ErrorMessage is not null)
+    {
+        <p>@Model.ErrorMessage</p>
+        <br>
+    }
+    <input asp-for="RoundId" type="hidden" value="@Model.RoundId" />
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

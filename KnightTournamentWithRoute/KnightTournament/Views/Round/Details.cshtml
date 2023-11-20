@@ -1,0 +1,44 @@
+﻿@using KnightTournament.ViewModels;
+@model RoundDetailsViewModel;
+@{
+    Guid roundId = ViewBag.roundId;
+}
+
+<div>
+    <h2>@Model.Name</h2>
+    <p>@Model.Description</p>
+    <p>Start Date: @Model.StartDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+    <p>End Date: @Model.StartDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+
+</div>
+
+
+<div class="d-inline-flex">
+    <div>
+        @if (Model.Combats != null && Model.Combats.Count > 0)
+        {
+            <h3>There are @Model.Combats.Count Combats</h3>
+            <a class="btn btn-info" asp-action="Display" asp-controller="Combat" asp-route-roundId="@roundId">View</a>
+        }
+        else
+        {
+            <p>No combats available for this tournament.</p>
+            <p><a href="@Url.Action("Create", "Combat", new { roundId = roundId})" class="btn btn-outline-primary">Create</a></p>
+        }
+
+    </div>
+    <div>
+        @if (Model.TrophyId is null)
+        {
+            <h4>Rounds hasn't trophy</h4>
+            <a class="btn btn-primary" asp-action="Display" asp-controller="Combat" asp-route-roundId="@roundId">Add trophy</a>
+        }
+        else
+        {
+            <h4>Round's Trophy</h4>
+            <a class=" btn btn-info" asp-controller="Trophy" asp-action="Details">View details</a>
+            <a class=" btn btn-info" asp-controller="Trophy" asp-action="Delete">Remove out of round</a>
+        }
+    </div>
+</div>
+

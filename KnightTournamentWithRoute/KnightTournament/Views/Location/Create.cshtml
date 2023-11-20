@@ -1,0 +1,29 @@
+﻿@using KnightTournament.ViewModels;
+@model LocationDetailsViewModel;
+
+@{
+    var creatingError = ViewBag.LocationAddingError;
+}
+
+<form method="post" asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Country">country</label>
+        <input asp-for="Country" class="form-control" placeholder="Enter country">
+    </div><br>
+    <div class="form-group">
+        <label asp-for="City">City</label>
+        <input asp-for="City" class="form-control" placeholder="Enter City">
+    </div><br>
+    <div class="form-group">
+        <label asp-for="Place">Place</label>
+        <input asp-for="Place" class="form-control" placeholder="Place">
+    </div><br>
+    <div class="form-group">
+        <label asp-for="ImgUri">URL</label>
+        <input asp-for="ImgUri" class="form-control" placeholder="Img">
+    </div><br>
+    <br/>
+    <p class="text-danger">@creatingError</p>
+    <br/>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

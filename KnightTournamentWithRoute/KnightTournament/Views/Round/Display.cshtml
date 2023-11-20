@@ -1,0 +1,43 @@
+﻿@using KnightTournament.ViewModels;
+@model DisplayViewModel<Round>
+<style>
+    .tournament-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: start;
+    }
+
+    .tournament-item {
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 30%;
+        box-sizing: border-box;
+    }
+
+    .operations a{
+        margin-right:20px;
+    }
+</style>
+<div>
+    <p>
+        <a asp-action="Create" asp-controller="Round" asp-route-tournamentId="@ViewBag.tournamentId" class="btn btn-outline-primary">Create new</a>
+    </p>
+</div>
+<div class="tournament-list">
+    @foreach (var round in Model.Entities)
+    {
+        <div class="tournament-item">
+            <h2>@round.Name</h2>
+            <p>Start Date:@round.StartDate</p>
+            <p>End Date:@round.EndDate</p>
+            <div class="operations" style="display:inline-flex">
+                <a asp-controller="Round" asp-action="Details" asp-route-tournamentId="@round.TournamentId" asp-route-id="@round.Id" class="btn btn-info">Details</a>.
+                <a asp-controller="Round" asp-action="Update" asp-route-id="@round.Id" class="btn btn-primary">Update</a>
+                <a asp-controller="Round" asp-action="Delete" asp-route-id="@round.Id" asp-route-tournamentId="@round.TournamentId" class="btn btn-danger">Delete</a>
+
+            </div>
+        </div>
+        <br />
+    }
+</div>

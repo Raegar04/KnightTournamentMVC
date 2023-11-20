@@ -1,0 +1,90 @@
+﻿@using KnightTournament.ViewModels;
+@model SelectEntityViewModel;
+@{
+    var entities = ViewBag.Entities;
+    var entityType = (Type)ViewBag.Type;
+}
+<style>
+    .list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: start;
+    }
+
+    .item {
+        border: 1px solid #ccc;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .operations a {
+        margin-right: 20px;
+        display: inline-flex;
+    }
+</style>
+<div>
+    <form method="post" asp-action="Search" asp-controller="DisplaySql">
+        <textarea asp-for="Query" placeholder="@Model.Query" class="form-control"></textarea><br />
+        <select asp-for="SelectedEntityType" asp-items="new SelectList((IEnumerable<Type>)ViewBag.Items, nameof(Type.Name), nameof(Type.Name))" class="form-control">
+            <option value="">Select Entity Type</option>
+        </select>
+        <br/>
+        <button type="submit" class="btn btn-primary">Select</button>
+    </form>
+
+
+    @if (entities is not null)
+    {
+        @switch (entityType)
+        {
+            case Type type when type == typeof(Combat):
+                <div class="list">
+                    @foreach (var combat in (List<Combat>)entities)
+                    {
+                        <div style="display:inline-flex; ">
+                            <div class="item">
+                                <h2>@combat.Type</h2>
+                                <p>Start Date:@combat.StartDate</p>
+                                <p>End Date:@combat.EndDate</p>
+                                <p><a asp-action="Details" asp-controller="Combat" asp-route-id="@combat.Id" class="btn btn-info">Details</a></p>
+                            </div>
+                        </div>
+                        <br />
+                    }
+                </div>
+                break;
+            case Type type when type == typeof(Tournament):
+                <div class="list">
+                    @foreach (var tournament in (List<Tournament>)entities)
+                    {
+                        <div class="item">
+                            <h2>@tournament.Name</h2>
+                            <p>Scope: @tournament.Scope</p>
+                            <p>Status: @tournament.Status</p>
+                            <p><a asp-action="Details" asp-controller="Tournament" asp-route-id="@tournament.Id" class="btn btn-info">Details</a></p>
+                        </div>
+                    }
+                </div>
+                break;
+            case Type type when type == typeof(Round):
+                <div class="list">
+                    @foreach (var round in (List<Round>)entities)
+                    {
+                        <div class="item">
+                            <h2>@round.Name</h2>
+                            <p>Start Date:@round.StartDate</p>
+                            <p>End Date:@round.EndDate</p>
+                            <p><a asp-action="Details" asp-controller="Round" asp-route-id="@round.Id" class="btn btn-info">Details</a></p>
+                        </div>
+                        <br />
+                    }
+                </div>
+                break;
+        }
+
+
+
+    }
+
+</div>
