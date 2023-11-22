@@ -22,6 +22,8 @@ namespace KnightTournament.ViewModels
 
         public string ErrorMessage { get; set; }
 
-        public Location Location { get; set; }
+        public Guid LocationId { get; set; }
+
+        public Guid HolderId { get; set; }
     }
 }

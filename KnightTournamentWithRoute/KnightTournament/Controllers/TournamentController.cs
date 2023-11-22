@@ -1,10 +1,12 @@
 ﻿using KnightTournament.BLL.Implementations;
 using KnightTournament.Extensions;
+using KnightTournament.Helpers;
 using KnightTournament.Models;
 using KnightTournament.Models.Enums;
 using KnightTournament.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,10 +16,14 @@ namespace KnightTournament.Controllers
     public class TournamentController : Controller
     {
         private readonly TournamentService _tournamentService;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly TournamentUserService _tournamentUserService;
 
-        public TournamentController(TournamentService tournamentService)
+        public TournamentController(TournamentService tournamentService, UserManager<AppUser> userManager, TournamentUserService tournamentUserService)
         {
             _tournamentService = tournamentService;
+            _userManager = userManager;
+            _tournamentUserService = tournamentUserService;
         }
 
         [HttpGet("Display")]
@@ -30,22 +36,21 @@ namespace KnightTournament.Controllers
             return View(displayTournamentsViewModel);
         }
 
-        [HttpGet("Details/{id}")]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var getByIdResult = await _tournamentService.GetByIdAsync(id);
-            if (!getByIdResult.IsSuccessful)
-            {
-                return RedirectToAction("Error");
-            }
+        //[HttpGet("Details/{id}")]
+        //public async Task<IActionResult> Details(Guid id)
+        //{
+        //    var getByIdResult = await _tournamentService.GetByIdAsync(id);
+        //    if (!getByIdResult.IsSuccessful)
+        //    {
+        //        return RedirectToAction("Error");
+        //    }
 
-            var tournamentDetailViewModel = new TournamentDetailsViewModel();
-            getByIdResult.Data.MapTo(ref tournamentDetailViewModel);
-            ViewBag.TournamentId = id;
-            return View(tournamentDetailViewModel);
-        }
+        //    var tournamentDetailViewModel = new TournamentDetailsViewModel();
+        //    getByIdResult.Data.MapTo(ref tournamentDetailViewModel);
+        //    ViewBag.TournamentId = id;
+        //    return View(tournamentDetailViewModel);
+        //}
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpGet("Create")]
         public IActionResult Create()
         {
@@ -58,13 +63,18 @@ namespace KnightTournament.Controllers
             return View(tournamentDetailViewModel);
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpPost("Create")]
         public async Task<IActionResult> Create(TournamentDetailsViewModel tournamentDetailsViewModel)
         {
             var tournament = new Tournament();
             tournamentDetailsViewModel.MapTo(ref tournament);
-            tournament.Status = Status.Planned;
+            var holderIdresult = User.GetUserIdFromPrincipal();
+            if (!holderIdresult.IsSuccessful)
+            {
+                TempData["Error"] = holderIdresult.Message;
+                return RedirectToAction("Create", "Tournament");
+            }
+            tournament.HolderId = holderIdresult.Data;
             var result = await _tournamentService.AddAsync(tournament);
             if (!result.IsSuccessful)
             {
@@ -76,7 +86,6 @@ namespace KnightTournament.Controllers
             //return RedirectToAction("Index", "Home");
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpGet("Update/{id}")]
         public async Task<IActionResult> Update(Guid id)
         {
@@ -91,7 +100,6 @@ namespace KnightTournament.Controllers
             return View(tournamentDetailViewModel);
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(Guid id, TournamentDetailsViewModel tournamentDetailsViewModel)
         {
@@ -107,16 +115,10 @@ namespace KnightTournament.Controllers
             return RedirectToAction("Display", "Tournament");
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var delete = await _tournamentService.DeleteAsync(id);
-            if (!delete.IsSuccessful)
-            {
-                return RedirectToAction("Error");
-            }
-
+            await _tournamentService.DeleteAsync(id);
             return RedirectToAction("Display", "Tournament");
         }
     }

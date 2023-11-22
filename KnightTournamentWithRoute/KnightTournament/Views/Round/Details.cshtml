@@ -1,7 +1,10 @@
-﻿@using KnightTournament.ViewModels;
+﻿@using KnightTournament.BLL.Implementations;
+@using KnightTournament.ViewModels;
 @model RoundDetailsViewModel;
+@inject TrophyService _trophyService;
 @{
     Guid roundId = ViewBag.roundId;
+    var trophy = (await _trophyService.GetByIdAsync(Model.TrophyId));
 }
 
 <div>
@@ -13,31 +16,39 @@
 </div>
 
 
-<div class="d-inline-flex">
+<div>
     <div>
         @if (Model.Combats != null && Model.Combats.Count > 0)
         {
-            <h3>There are @Model.Combats.Count Combats</h3>
+            <h4>There are @Model.Combats.Count Combats</h4>
             <a class="btn btn-info" asp-action="Display" asp-controller="Combat" asp-route-roundId="@roundId">View</a>
         }
         else
         {
-            <p>No combats available for this tournament.</p>
+            <h4>No combats available for this tournament.</h4>
             <p><a href="@Url.Action("Create", "Combat", new { roundId = roundId})" class="btn btn-outline-primary">Create</a></p>
         }
 
     </div>
+    <br/>
     <div>
-        @if (Model.TrophyId is null)
+        @if (!trophy.IsSuccessful)
         {
-            <h4>Rounds hasn't trophy</h4>
-            <a class="btn btn-primary" asp-action="Display" asp-controller="Combat" asp-route-roundId="@roundId">Add trophy</a>
+            <div>
+                <h4>Rounds hasn't trophy</h4>
+                <a class="btn btn-info" asp-action="Create" asp-controller="Trophy" asp-route-roundId="@roundId">Add trophy</a>
+            </div>
+
         }
         else
         {
-            <h4>Round's Trophy</h4>
-            <a class=" btn btn-info" asp-controller="Trophy" asp-action="Details">View details</a>
-            <a class=" btn btn-info" asp-controller="Trophy" asp-action="Delete">Remove out of round</a>
+            <div>
+                <h4>Round's Trophy</h4>
+                <h6>@trophy.Data.Name</h6>
+                <p>Value: @trophy.Data.Value</p>
+                <a class=" btn btn-info" asp-controller="Trophy" asp-action="Delete" asp-route-id="@Model.TrophyId">Remove out of round</a>
+            </div>
+
         }
     </div>
 </div>

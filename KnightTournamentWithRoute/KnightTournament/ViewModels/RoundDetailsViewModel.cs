@@ -18,7 +18,7 @@ namespace KnightTournament.ViewModels
 
         public ICollection<Combat> Combats { get; set; }
 
-        public Guid? TrophyId { get; set; }
+        public Guid TrophyId { get; set; }
 
         public string ErrorMessage { get; set; }
     }

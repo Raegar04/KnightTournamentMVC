@@ -12,35 +12,23 @@ namespace KnightTournament.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager;
         }
 
         [Route("Register")]
-        public async Task<IActionResult> Register(string registerUrl = null)
+        public async Task<IActionResult> Register()
         {
-            //if (!await _roleManager.RoleExistsAsync(Role.StakeHolder.ToString()))
-            //{
-            //    await _roleManager.CreateAsync(new IdentityRole(Role.StakeHolder.ToString()));
-            //    await _roleManager.CreateAsync(new IdentityRole(Role.Knight.ToString()));
-            //}
             RegisterViewModel registerViewModel = new RegisterViewModel();
-            registerViewModel.ReturnUrl = registerUrl;
             return View(registerViewModel);
         }
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register(RegisterViewModel registerViewModel, string registerUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
-
-            registerViewModel.ReturnUrl = registerUrl;
-            registerUrl = registerUrl ?? Url.Content("~/");
-
             var user = new AppUser() { UserName = registerViewModel.UserName, Email = registerViewModel.Email };
             var result = await _userManager.CreateAsync(user, registerViewModel.Password);
             if (!result.Succeeded)
@@ -48,18 +36,16 @@ namespace KnightTournament.Controllers
                 ModelState.AddModelError("Password", "Cannot create user");
             }
 
-            //await _userManager.AddToRoleAsync(user, registerViewModel.SelectedRole.ToString());
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            await _signInManager.SignInAsync(user, isPersistent: true);
 
             return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
         [Route("Login")]
-        public IActionResult Login(string registerUrl = null)
+        public IActionResult Login()
         {
             LoginViewModel loginViewModel = new LoginViewModel();
-            loginViewModel.ReturnUrl = registerUrl ?? Url.Content("~/");
             return View(loginViewModel);
         }
 
@@ -78,18 +64,16 @@ namespace KnightTournament.Controllers
         {
             var result = await _signInManager.PasswordSignInAsync(
                                 loginViewModel.UserName, loginViewModel.Password, loginViewModel.RememberMe, lockoutOnFailure: false);
-            //if (result.IsLockedOut) { return View("Lockout", $"You've been locked out. Try in {_signInManager.Options.Lockout.DefaultLockoutTimeSpan.ToString()}"); }
             if (!result.Succeeded)
             {
-                ModelState.AddModelError("", "Invalid login try");
+                loginViewModel.ErrorMessage = "Invalid credentials";
                 return View(loginViewModel);
             }
 
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        [ValidateAntiForgeryToken]
+        [HttpGet("LogOff")]
         public async Task<IActionResult> LogOff()
         {
             await _signInManager.SignOutAsync();

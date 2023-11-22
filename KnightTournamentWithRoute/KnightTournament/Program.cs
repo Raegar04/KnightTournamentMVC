@@ -17,9 +17,11 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<TournamentService>();
 builder.Services.AddScoped<RoundService>();
 builder.Services.AddScoped<CombatService>();
+builder.Services.AddScoped<TournamentUserService>();
+builder.Services.AddScoped<CombatKnightService>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddUserStore<UserStore<AppUser, AppRole, ApplicationDbContext, Guid>>();
+builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>().AddEntityFrameworkStores<ApplicationDbContext>().AddUserStore<UserStore<AppUser, IdentityRole<Guid>, ApplicationDbContext, Guid>>();
 
 var app = builder.Build();
 

@@ -45,7 +45,6 @@ namespace KnightTournament.Controllers
             return View(roundDetailsViewModel);
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpGet("Create")]
         public IActionResult Create(Guid tournamentId)
         {
@@ -58,7 +57,6 @@ namespace KnightTournament.Controllers
             return View(roundDetailViewModel);
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpPost("Create")]
         public async Task<IActionResult> Create(RoundDetailsViewModel roundDetailsViewModel)
         {
@@ -71,10 +69,9 @@ namespace KnightTournament.Controllers
                 return RedirectToAction("Create", "Round");
             }
 
-            return RedirectToAction("Details", "Tournament", routeValues:new { id =  round.TournamentId});
+            return RedirectToAction("Display", "Round", routeValues: new { tournamentId = round.TournamentId });
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpGet("Update/{id}")]
         public async Task<IActionResult> Update(Guid id)
         {
@@ -89,7 +86,6 @@ namespace KnightTournament.Controllers
             return View(roundDetailViewModel);
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(Guid id, RoundDetailsViewModel tournamentDetailsViewModel)
         {
@@ -102,10 +98,9 @@ namespace KnightTournament.Controllers
             tournamentDetailsViewModel.MapTo(ref round);
             await _roundService.UpdateAsync(id, round);
 
-            return RedirectToAction("Details", "Tournament", routeValues: new { id = round.TournamentId });
+            return RedirectToAction("Display", "Round", routeValues: new { tournamentId = round.TournamentId });
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(Guid tournamentId, Guid id)
         {
@@ -117,7 +112,7 @@ namespace KnightTournament.Controllers
             }
 
 
-            return RedirectToAction("Details", "Tournament", new { id = tournamentId });
+            return RedirectToAction("Display", "Round", routeValues: new { tournamentId = tournamentId });
         }
     }
 }

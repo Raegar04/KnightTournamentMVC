@@ -49,7 +49,6 @@ namespace KnightTournament.Controllers
             return View(combatDetailsViewModel);
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpGet("Create")]
         public IActionResult Create(Guid roundId)
         {
@@ -62,7 +61,6 @@ namespace KnightTournament.Controllers
             return View(combatDetailsViewModel);
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpPost("Create")]
         public async Task<IActionResult> Create(CombatDetailsViewModel combatDetailsViewModel)
         {
@@ -78,7 +76,6 @@ namespace KnightTournament.Controllers
             return RedirectToAction("Details", "Round", routeValues: new { id = combat.RoundId });
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpGet("Update/{id}")]
         public async Task<IActionResult> Update(Guid id)
         {
@@ -93,7 +90,6 @@ namespace KnightTournament.Controllers
             return View(combatDetailsViewModel);
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, CombatDetailsViewModel combatDetailsViewModel)
         {
@@ -109,7 +105,6 @@ namespace KnightTournament.Controllers
             return RedirectToAction("Details", "Round", routeValues: new { id = combat.RoundId });
         }
 
-        [Authorize(Roles = "StakeHolder")]
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(Guid roundId, Guid id)
         {

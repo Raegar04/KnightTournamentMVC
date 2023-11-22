@@ -1,11 +1,12 @@
 ﻿using KnightTournament.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 
 namespace KnightTournament.DAL
 {
-    public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>
+    public class ApplicationDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     {
         public ApplicationDbContext()
         {

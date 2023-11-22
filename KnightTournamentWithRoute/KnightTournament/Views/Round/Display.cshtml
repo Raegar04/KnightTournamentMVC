@@ -15,6 +15,11 @@
         box-sizing: border-box;
     }
 
+    .operations{
+    display:inline-flex;
+    flex-wrap:wrap;
+    }
+
     .operations a{
         margin-right:20px;
     }
@@ -27,17 +32,57 @@
 <div class="tournament-list">
     @foreach (var round in Model.Entities)
     {
+        var trophy = round.Trophy;
+
         <div class="tournament-item">
-            <h2>@round.Name</h2>
-            <p>Start Date:@round.StartDate</p>
-            <p>End Date:@round.EndDate</p>
+            <div>
+                <h2>Options:</h2>
+                <h2>@round.Name</h2>
+                <p>@round.Description</p>
+                <p>Start Date:@round.StartDate</p>
+                <p>End Date:@round.EndDate</p>
+                
+            </div><br />
+            <div>
+                @if (trophy is null)
+                {
+                    <div>
+                        <h4>Rounds hasn't trophy</h4>
+                        <a class="btn btn-info" asp-action="Create" asp-controller="Trophy" asp-route-roundId="@round.Id">Add trophy</a>
+                    </div>
+
+                }
+                else
+                {
+                    <div>
+                        <h4>Round's Trophy</h4>
+                        <h6>@trophy.Name</h6>
+                        <p>Value: @trophy.Value</p>
+                        <a class=" btn btn-info" asp-controller="Trophy" asp-action="Delete" asp-route-id="@trophy.Id">Remove out of round</a>
+                    </div>
+
+                }
+            </div><br />
+            <div>
+                @if (round.Combats != null && round.Combats.Count > 0)
+                {
+                    <h4>There are @round.Combats.Count Combats</h4>
+                    <a class="btn btn-info" asp-action="Display" asp-controller="Combat" asp-route-roundId="@round.Id">View</a>
+                }
+                else
+                {
+                    <h4>No combats available for this tournament.</h4>
+                    <p><a href="@Url.Action("Create", "Combat", new { roundId = round.Id})" class="btn btn-outline-primary">Create</a></p>
+                }
+
+            </div>
+            <br />
             <div class="operations" style="display:inline-flex">
-                <a asp-controller="Round" asp-action="Details" asp-route-tournamentId="@round.TournamentId" asp-route-id="@round.Id" class="btn btn-info">Details</a>.
                 <a asp-controller="Round" asp-action="Update" asp-route-id="@round.Id" class="btn btn-primary">Update</a>
                 <a asp-controller="Round" asp-action="Delete" asp-route-id="@round.Id" asp-route-tournamentId="@round.TournamentId" class="btn btn-danger">Delete</a>
 
             </div>
+            
         </div>
-        <br />
     }
 </div>

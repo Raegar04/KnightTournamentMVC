@@ -1,5 +1,11 @@
-﻿@using KnightTournament.ViewModels;
+﻿@using KnightTournament.Extensions;
+@using KnightTournament.ViewModels;
 @model DisplayViewModel<Tournament>
+
+@{
+    var resultHolderId = User.GetUserIdFromPrincipal();
+}
+
 <style>
     .tournament-list {
         display: flex;
@@ -15,7 +21,7 @@
         box-sizing: border-box;
     }
 
-    .operations a{
+    .operations a {
         margin-right: 20px;
         display: inline-flex;
     }
@@ -30,13 +36,42 @@
     {
         <div class="tournament-item">
             <h2>@tournament.Name</h2>
+            <p>@tournament.Description</p>
             <p>Scope: @tournament.Scope</p>
             <p>Status: @tournament.Status</p>
             <div class="operations">
+                @if (tournament.Rounds != null && tournament.Rounds.Count > 0)
+                {
+                    <h3>Tournament consists of @tournament.Rounds.Count rounds.</h3>
+                    <a class="btn btn-info" asp-action="Display" asp-controller="Round" asp-route-tournamentId="@tournament.Id">View</a>
+                }
+                else
+                {
+                    <p>No rounds available for this tournament.</p>
+                    <p><a href="@Url.Action("Create", "Round", new { tournamentId = tournament.Id})" class="btn btn-outline-primary">Create</a></p>
+                }
+            </div><br />
+            <h2> Options:</h2>
+            <div class="operations">
                 <a asp-controller="Tournament" asp-action="Details" asp-route-id="@tournament.Id" class="btn btn-info">Details</a>
-                <a asp-controller="Tournament" asp-action="Update" asp-route-id="@tournament.Id" class="btn btn-primary">Update</a>
-                <a asp-controller="Tournament" asp-action="Delete" asp-route-id="@tournament.Id" class="btn btn-danger">Delete</a>
-            </div>
+                @if (resultHolderId.IsSuccessful && resultHolderId.Data == tournament.HolderId)
+                {
+                    <a asp-controller="Tournament" asp-action="Update" asp-route-id="@tournament.Id" class="btn btn-primary">Update</a>
+                    <a asp-controller="Tournament" asp-action="Delete" asp-route-id="@tournament.Id" class="btn btn-danger">Delete</a>
+                }
+                else if (resultHolderId.IsSuccessful && resultHolderId.Data != tournament.HolderId)
+                {
+                    @if (tournament.Knights.Any(knight=>knight.Id==resultHolderId.Data))
+                    {
+                        <span class="text text-primary">Applied</span>
+                    }
+                    else
+                    {
+                        <a asp-controller="TournamentKnight" asp-action="Apply" asp-route-tournamentId="@tournament.Id" class="btn btn-primary">Apply</a>
+                    }
+                }
+            </div><br/>
+           
         </div>
     }
 </div>

@@ -11,46 +11,42 @@
         <div class="col-md-10">
             <input asp-for="Email" class="form-control" />
         </div><br />
-        @* <span>Confirm Email: </span>
-        <select asp-for="SelectedActionEmailConfirming" asp-items="@(new SelectList(Model.ActionsEmailConfirming, $"{Model.SelectedActionEmailConfirming}"))">
-            <option value="">-- Action --</option>
-        </select><br /> *@
     </div>
     <div class="form-group">
         <label asp-for="UserName" class="col-md-2"></label>
         <div class="col-md-10">
             <input asp-for="UserName" class="form-control" />
-        </div>
+        </div><br />
     </div>
     <div class="form-group">
         <label asp-for="Password" class="col-md-2"></label>
         <div class="col-md-10">
-            <input asp-for="Password" class="form-control" />
-        </div>
+            <input type="password" asp-for="Password" class="form-control" />
+        </div><br />
     </div>
     <div class="form-group">
         <label asp-for="ConfirmPassword" class="col-md-2"></label>
         <div class="col-md-10">
-            <input asp-for="ConfirmPassword" class="form-control" />
-        </div>
-    </div><br />
+            <input type="password" asp-for="ConfirmPassword" class="form-control" />
+        </div><br />
+    </div>
     <div class="form-group">
         <label asp-for="Rank" class="col-md-2"></label>
         <div class="col-md-10">
             <select asp-for="Rank" asp-items="@Html.GetEnumSelectList<Rank>()" class="form-control">
                 <option disabled selected>--Select Rank--</option>
             </select>
-        </div>
+        </div><br />
     </div>
     <div class="form-group">
         <label asp-for="Rating" class="col-md-2"></label>
         <div class="col-md-10">
             <input asp-for="Rating" type="number" class="form-control" />
-        </div>
+        </div><br />
     </div>
     <div class="form-group">
         <div class="offset-md-2 col-md-10">
             <button type="submit" class="btn btn-success ">Register</button>
-        </div>
+        </div><br />
     </div>
 </form>

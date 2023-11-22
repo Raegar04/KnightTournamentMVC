@@ -16,11 +16,11 @@ namespace KnightTournament.Models
 
         public DateTime StartDate { get; set; }
 
-        public Status Status { get; set; }
+        public Status Status { get; set; } = Status.Planned;
 
         public virtual ICollection<Round> Rounds { get; set; }
 
-        public virtual Guid? LocationId { get; set; }
+        public virtual Guid? LocationId { get; set; }  = new Guid("c8df80c9-a8c6-4c07-919c-37fcfc0c731d");
 
         public virtual Location Location { get; set; }
 

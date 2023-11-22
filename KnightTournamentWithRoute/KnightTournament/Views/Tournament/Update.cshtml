@@ -25,6 +25,8 @@
             <option value="">Select Combat Type</option>
         </select>
     </div>
+    <input type="hidden" asp-for="LocationId" value="@Model.LocationId"/>
+    <input type="hidden" asp-for="HolderId" value="@Model.HolderId" />
     @if (Model.ErrorMessage is not null)
     {
         <p>@Model.ErrorMessage</p>

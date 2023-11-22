@@ -2,7 +2,7 @@
 {
     public class TournamentUsers
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public virtual Guid TournamentId { get; set; }
 
