@@ -1,5 +1,12 @@
-﻿@using KnightTournament.ViewModels;
+﻿@using KnightTournament.BLL.Implementations;
+@using KnightTournament.Extensions;
+@using KnightTournament.ViewModels;
 @model DisplayViewModel<Round>
+@inject TournamentService _tournamentService;
+@{
+    var tournament = (await  _tournamentService.GetByIdAsync(ViewBag.tournamentId)).Data;
+    var resultHolderId = User.GetUserIdFromPrincipal();
+}
 <style>
     .tournament-list {
         display: flex;
@@ -33,10 +40,10 @@
     @foreach (var round in Model.Entities)
     {
         var trophy = round.Trophy;
-
+        var isHolded = resultHolderId.Data == tournament.HolderId;
         <div class="tournament-item">
             <div>
-                <h2>Options:</h2>
+                
                 <h2>@round.Name</h2>
                 <p>@round.Description</p>
                 <p>Start Date:@round.StartDate</p>
@@ -47,8 +54,12 @@
                 @if (trophy is null)
                 {
                     <div>
-                        <h4>Rounds hasn't trophy</h4>
-                        <a class="btn btn-info" asp-action="Create" asp-controller="Trophy" asp-route-roundId="@round.Id">Add trophy</a>
+                        <h4>Round hasn't trophy</h4>
+                        @if (isHolded)
+                        {
+                                                    <a class="btn btn-outline-primary" asp-action="Create" asp-controller="Trophy" asp-route-roundId="@round.Id">Add trophy</a>
+
+                        }
                     </div>
 
                 }
@@ -58,7 +69,11 @@
                         <h4>Round's Trophy</h4>
                         <h6>@trophy.Name</h6>
                         <p>Value: @trophy.Value</p>
-                        <a class=" btn btn-info" asp-controller="Trophy" asp-action="Delete" asp-route-id="@trophy.Id">Remove out of round</a>
+                        @if (isHolded)
+                        {
+                                                    <a class=" btn btn-outline-primary" asp-controller="Trophy" asp-action="Delete" asp-route-id="@trophy.Id">Remove out of round</a>
+
+                        }
                     </div>
 
                 }
@@ -67,21 +82,32 @@
                 @if (round.Combats != null && round.Combats.Count > 0)
                 {
                     <h4>There are @round.Combats.Count Combats</h4>
-                    <a class="btn btn-info" asp-action="Display" asp-controller="Combat" asp-route-roundId="@round.Id">View</a>
+                    <a class="btn btn-outline-primary" asp-action="Display" asp-controller="Combat" asp-route-roundId="@round.Id">View</a>
                 }
                 else
                 {
-                    <h4>No combats available for this tournament.</h4>
+                    <h4>No combats available for this round.</h4>
+                    if (isHolded)
+                    {
+                         
                     <p><a href="@Url.Action("Create", "Combat", new { roundId = round.Id})" class="btn btn-outline-primary">Create</a></p>
+                    }
+                   
                 }
 
             </div>
             <br />
+            @if (isHolded)
+            {
+                <h2>Options:</h2>
             <div class="operations" style="display:inline-flex">
+               
                 <a asp-controller="Round" asp-action="Update" asp-route-id="@round.Id" class="btn btn-primary">Update</a>
                 <a asp-controller="Round" asp-action="Delete" asp-route-id="@round.Id" asp-route-tournamentId="@round.TournamentId" class="btn btn-danger">Delete</a>
 
             </div>
+            }
+            
             
         </div>
     }

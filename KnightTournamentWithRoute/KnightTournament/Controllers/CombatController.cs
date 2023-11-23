@@ -34,20 +34,20 @@ namespace KnightTournament.Controllers
             return View(displayCombatsViewModel);
         }
 
-        [HttpGet("Details/{id}")]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var getByIdResult = await _combatService.GetByIdAsync(id);
-            if (!getByIdResult.IsSuccessful)
-            {
-                return RedirectToAction("Error");
-            }
+        //[HttpGet("Details/{id}")]
+        //public async Task<IActionResult> Details(Guid id)
+        //{
+        //    var getByIdResult = await _combatService.GetByIdAsync(id);
+        //    if (!getByIdResult.IsSuccessful)
+        //    {
+        //        return RedirectToAction("Error");
+        //    }
 
-            var combatDetailsViewModel = new CombatDetailsViewModel();
-            getByIdResult.Data.MapTo(ref combatDetailsViewModel);
-            combatDetailsViewModel.PathToImage = combatDetailsViewModel.Type.SetImgToType();
-            return View(combatDetailsViewModel);
-        }
+        //    var combatDetailsViewModel = new CombatDetailsViewModel();
+        //    getByIdResult.Data.MapTo(ref combatDetailsViewModel);
+        //    combatDetailsViewModel.PathToImage = combatDetailsViewModel.Type.SetImgToType();
+        //    return View(combatDetailsViewModel);
+        //}
 
         [HttpGet("Create")]
         public IActionResult Create(Guid roundId)
@@ -73,7 +73,7 @@ namespace KnightTournament.Controllers
                 return RedirectToAction("Create", "Combat");
             }
 
-            return RedirectToAction("Details", "Round", routeValues: new { id = combat.RoundId });
+            return RedirectToAction("Display", "Combat", routeValues: new { roundId = combat.RoundId });
         }
 
         [HttpGet("Update/{id}")]
@@ -102,7 +102,7 @@ namespace KnightTournament.Controllers
             combatDetailsViewModel.MapTo(ref combat);
             await _combatService.UpdateAsync(id, combat);
 
-            return RedirectToAction("Details", "Round", routeValues: new { id = combat.RoundId });
+            return RedirectToAction("Display", "Combat", routeValues: new { roundId = combat.RoundId });
         }
 
         [HttpGet("Delete/{id}")]
@@ -116,7 +116,7 @@ namespace KnightTournament.Controllers
             }
 
 
-            return RedirectToAction("Details", "Round", new { id = roundId });
+            return RedirectToAction("Display", "Combat", routeValues: new { roundId = roundId });
         }
     }
 }

@@ -25,39 +25,114 @@
         margin-right: 20px;
         display: inline-flex;
     }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+    }
+
+    #form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+    }
 </style>
 <div>
     <p>
-        <a asp-controller="Tournament" asp-action="Create" class="btn btn-outline-primary">Create new</a>
+
+        <form class="d-flex" method="post" asp-action="Search" asp-controller="Tournament" style="margin-left:50px; ">
+            <a asp-controller="Tournament" asp-action="Create" class="btn btn-outline-primary">Create new</a>
+
+            <span style="display:flex">
+                <span>Search by</span>
+                <select class="form-control" asp-for="SelectedSearchOption">
+                    <option value="">-- Select --</option>
+                    @foreach (var entity in Model.SearchItems)
+                    {
+                        <option value="@entity">@entity</option>
+                    }
+                </select>
+                <input type="text" asp-for="SearchString" placeholder="@Model.SearchString"/>
+            </span>
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+        
     </p>
 </div>
 <div class="tournament-list">
     @foreach (var tournament in Model.Entities)
     {
+        @* var id = tournament.Id; *@
+        var knights = tournament.Knights;
+        
         <div class="tournament-item">
+            <input type="hidden" id="tour-info" placeholder="@tournament.Id" />
             <h2>@tournament.Name</h2>
             <p>@tournament.Description</p>
             <p>Scope: @tournament.Scope</p>
+            <p>Start Date: @tournament.StartDate</p>
+            <p>Location: @tournament.Location.Country. @tournament.Location.City. @tournament.Location.Place</p>
             <p>Status: @tournament.Status</p>
             <div class="operations">
                 @if (tournament.Rounds != null && tournament.Rounds.Count > 0)
                 {
-                    <h3>Tournament consists of @tournament.Rounds.Count rounds.</h3>
-                    <a class="btn btn-info" asp-action="Display" asp-controller="Round" asp-route-tournamentId="@tournament.Id">View</a>
+                    <h4>Tournament consists of @tournament.Rounds.Count rounds.</h4>
+                    <a class="btn btn-outline-primary" asp-action="Display" asp-controller="Round" asp-route-tournamentId="@tournament.Id">View</a>
                 }
                 else
                 {
                     <p>No rounds available for this tournament.</p>
-                    <p><a href="@Url.Action("Create", "Round", new { tournamentId = tournament.Id})" class="btn btn-outline-primary">Create</a></p>
+                    @if (resultHolderId.IsSuccessful && resultHolderId.Data == tournament.HolderId)
+                    {
+                         <p><a href="@Url.Action("Create", "Round", new { tournamentId = tournament.Id})" class="btn btn-outline-primary">Create</a></p>
+                    }
                 }
             </div><br />
-            <h2> Options:</h2>
             <div class="operations">
-                <a asp-controller="Tournament" asp-action="Details" asp-route-id="@tournament.Id" class="btn btn-info">Details</a>
                 @if (resultHolderId.IsSuccessful && resultHolderId.Data == tournament.HolderId)
                 {
+                    <h2> Options:</h2>
                     <a asp-controller="Tournament" asp-action="Update" asp-route-id="@tournament.Id" class="btn btn-primary">Update</a>
                     <a asp-controller="Tournament" asp-action="Delete" asp-route-id="@tournament.Id" class="btn btn-danger">Delete</a>
+                     <button id="@tournament.Id" onclick="showForm()" type="button" class="btn btn-dark">Applied Users</button>
+                    @*<div class="overlay" id="@tournament.Id">
+                        <div id="form-container">
+                            <h4>Applied Users</h4>
+                            @foreach (var user in tournament.Knights)
+                            {
+                                <p>@user.UserName<span>Rank:@user.Rank</span></p>
+                                <br />
+                            }
+                            
+                            <button type="button" onclick="closeForm()" class="btn btn-danger">Close</button>
+                        </div>
+                    </div>
+                    <script>
+                        function showForm() {
+                            const id = document.getElementById("tour-info").ariaPlaceholder;
+                            var overlay = document.getElementById(id);
+                            overlay.style.display = 'flex';
+                            
+                            document.body.style.overflow = 'hidden';
+                        }
+
+                        function closeForm() {
+                            const id = document.getElementById("tour-info").ariaPlaceholder;
+                            var overlay = document.getElementById(id);
+                            overlay.style.display = 'none';
+                            document.body.style.overflow = 'auto';
+                        }
+                    </script> *@
+
                 }
                 else if (resultHolderId.IsSuccessful && resultHolderId.Data != tournament.HolderId)
                 {
@@ -67,6 +142,7 @@
                     }
                     else
                     {
+                        <h4> Options:</h4>
                         <a asp-controller="TournamentKnight" asp-action="Apply" asp-route-tournamentId="@tournament.Id" class="btn btn-primary">Apply</a>
                     }
                 }

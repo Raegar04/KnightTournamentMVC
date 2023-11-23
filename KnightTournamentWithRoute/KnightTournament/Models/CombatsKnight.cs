@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public double Points { get; set; }
+        public double Points { get; set; } = 0;
 
         public virtual Guid CombatId { get; set; }
 

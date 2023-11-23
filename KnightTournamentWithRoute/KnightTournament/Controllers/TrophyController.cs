@@ -37,16 +37,18 @@ namespace KnightTournament.Controllers
                 return RedirectToAction("Create");
             }
 
-            return RedirectToAction("Details", "Round", new { id = trophy.RoundId});
+            var tournamentId = await _service.GetTournamentIdFromTrophy(trophy.RoundId);
+            return RedirectToAction("Display", "Round", new { tournamentId = tournamentId });
         }
 
         [HttpGet("Delete/{id}")]
-        public async Task<IActionResult> Delete(Guid id) 
+        public async Task<IActionResult> Delete([FromRoute]Guid id) 
         {
             var roundId = (await _service.GetByIdAsync(id)).Data.RoundId;
+            var tournamentId = await _service.GetTournamentIdFromTrophy(roundId);
             await _service.DeleteAsync(id);
 
-            return RedirectToAction("Details", "Round", new { id = roundId });
+            return RedirectToAction("Display", "Round", new { tournamentId = tournamentId });
         }
     }
 }

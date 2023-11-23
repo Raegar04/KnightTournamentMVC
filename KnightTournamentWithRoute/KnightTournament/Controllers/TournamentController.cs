@@ -30,8 +30,14 @@ namespace KnightTournament.Controllers
         public async Task<IActionResult> Display()
         {
             var getResult = await _tournamentService.GetAllAsync();
-            var displayTournamentsViewModel = new DisplayViewModel<Tournament>();
-            displayTournamentsViewModel.Entities = (ICollection<Tournament>)getResult.Data;
+            var displayTournamentsViewModel = new DisplayViewModel<Tournament>() 
+            {
+                Entities = (ICollection<Tournament>)getResult.Data,
+                SearchItems = new List<string>() 
+                {
+                    "All", "Name", "Description", "Status", "Location"
+                }
+            };
 
             return View(displayTournamentsViewModel);
         }
@@ -61,6 +67,12 @@ namespace KnightTournament.Controllers
             }
 
             return View(tournamentDetailViewModel);
+        }
+
+        [HttpPost("Search")]
+        public async Task<IActionResult> Search(DisplayViewModel<Tournament> displayViewModel) 
+        {
+            throw new NotImplementedException();
         }
 
         [HttpPost("Create")]

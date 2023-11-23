@@ -24,26 +24,26 @@ namespace KnightTournament.Controllers
         {
             //var tournamentId = TempData["TournamentId"];
             var getResult = await _roundService.GetAllAsync(round => round.TournamentId.ToString() == tournamentId.ToString());
-            var displayTournamentsViewModel = new DisplayViewModel<Round>();
-            displayTournamentsViewModel.Entities = (ICollection<Round>)getResult.Data;
+            var displayRoundsViewModel = new DisplayViewModel<Round>();
+            displayRoundsViewModel.Entities = (ICollection<Round>)getResult.Data;
             ViewBag.tournamentId = tournamentId;
-            return View(displayTournamentsViewModel);
+            return View(displayRoundsViewModel);
         }
 
-        [HttpGet("Details/{id}")]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var getByIdResult = await _roundService.GetByIdAsync(id);
-            if (!getByIdResult.IsSuccessful)
-            {
-                return RedirectToAction("Error");
-            }
+        //[HttpGet("Details/{id}")]
+        //public async Task<IActionResult> Details(Guid id)
+        //{
+        //    var getByIdResult = await _roundService.GetByIdAsync(id);
+        //    if (!getByIdResult.IsSuccessful)
+        //    {
+        //        return RedirectToAction("Error");
+        //    }
 
-            var roundDetailsViewModel = new RoundDetailsViewModel();
-            getByIdResult.Data.MapTo(ref roundDetailsViewModel);
-            ViewBag.roundId = id;
-            return View(roundDetailsViewModel);
-        }
+        //    var roundDetailsViewModel = new RoundDetailsViewModel();
+        //    getByIdResult.Data.MapTo(ref roundDetailsViewModel);
+        //    ViewBag.roundId = id;
+        //    return View(roundDetailsViewModel);
+        //}
 
         [HttpGet("Create")]
         public IActionResult Create(Guid tournamentId)

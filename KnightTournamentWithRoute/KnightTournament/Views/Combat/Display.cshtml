@@ -1,5 +1,10 @@
-﻿@using KnightTournament.ViewModels;
+﻿@using KnightTournament.BLL.Implementations;
+@using KnightTournament.ViewModels;
 @model DisplayViewModel<CombatDetailsViewModel>
+@inject RoundService _roundService;
+@{
+    var round =  (await _roundService.GetByIdAsync(ViewBag.roundId)).Data;
+}
 <style>
     .tournament-list {
         display: flex;
@@ -22,6 +27,7 @@
 </style>
 <div>
     <p>
+        <a asp-action="Display" asp-controller="Round" asp-route-tournamentId="@round.TournamentId" class="btn btn-primary"><span>&#10094; </span>Back to rounds</a>
         <a asp-action="Create" asp-controller="Combat" asp-route-roundId="@ViewBag.roundId" class="btn btn-outline-primary">Create new</a>
     </p>
 </div>
@@ -34,7 +40,6 @@
                 <p>Start Date:@combat.StartDate</p>
                 <p>End Date:@combat.EndDate</p>
                 <div class="operations">
-                    <a asp-controller="Combat" asp-action="Details" asp-route-roundId="@combat.RoundId" asp-route-id="@combat.Id" class="btn btn-info" style="margin-right:15px">Details</a>
                     <a asp-controller="Combat" asp-action="Delete" asp-route-id="@combat.Id" asp-route-roundId="@combat.RoundId" class="btn btn-danger">Delete</a>
                     <a asp-controller="Combat" asp-action="Update" asp-route-id="@combat.Id" asp-route-roundId="@combat.RoundId" class="btn btn-primary">Update</a>
                 </div>
