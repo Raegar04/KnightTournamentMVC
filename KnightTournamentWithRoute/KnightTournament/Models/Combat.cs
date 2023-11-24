@@ -1,4 +1,5 @@
 ﻿using KnightTournament.Models.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KnightTournament.Models
 {
@@ -13,10 +14,12 @@ namespace KnightTournament.Models
 
         public CombatType Type { get; set; }
 
+        public bool IsFinished { get; set; } = false;
+
         public virtual Guid RoundId { get; set; }
 
         public virtual Round Round { get; set; }
 
-        public virtual ICollection<AppUser> AssignedKnights { get; set; }
+        public virtual ICollection<AppUser> AppUsers { get; set; }
     }
 }

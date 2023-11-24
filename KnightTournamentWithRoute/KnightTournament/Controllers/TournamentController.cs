@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
 
 namespace KnightTournament.Controllers
@@ -26,36 +27,26 @@ namespace KnightTournament.Controllers
             _tournamentUserService = tournamentUserService;
         }
 
+        [Authorize]
         [HttpGet("Display")]
         public async Task<IActionResult> Display()
         {
             var getResult = await _tournamentService.GetAllAsync();
-            var displayTournamentsViewModel = new DisplayViewModel<Tournament>() 
+            var displayTournamentsViewModel = new DisplayViewModel<Tournament>()
             {
                 Entities = (ICollection<Tournament>)getResult.Data,
-                SearchItems = new List<string>() 
+                SearchItems = new List<string>()
                 {
                     "All", "Name", "Description", "Status", "Location"
+                },
+                FilterItems = new List<string>()
+                {
+                    "Scope", "StartDate"
                 }
             };
 
             return View(displayTournamentsViewModel);
         }
-
-        //[HttpGet("Details/{id}")]
-        //public async Task<IActionResult> Details(Guid id)
-        //{
-        //    var getByIdResult = await _tournamentService.GetByIdAsync(id);
-        //    if (!getByIdResult.IsSuccessful)
-        //    {
-        //        return RedirectToAction("Error");
-        //    }
-
-        //    var tournamentDetailViewModel = new TournamentDetailsViewModel();
-        //    getByIdResult.Data.MapTo(ref tournamentDetailViewModel);
-        //    ViewBag.TournamentId = id;
-        //    return View(tournamentDetailViewModel);
-        //}
 
         [HttpGet("Create")]
         public IActionResult Create()
@@ -70,9 +61,35 @@ namespace KnightTournament.Controllers
         }
 
         [HttpPost("Search")]
-        public async Task<IActionResult> Search(DisplayViewModel<Tournament> displayViewModel) 
+        public async Task<IActionResult> Search(DisplayViewModel<Tournament> displayViewModel)
         {
-            throw new NotImplementedException();
+            var res = await _tournamentService.SearchAsync(displayViewModel.SelectedSearchOption, displayViewModel.SearchString);
+            displayViewModel.Entities = (ICollection<Tournament>)res.Data;
+            displayViewModel.SearchItems = new List<string>()
+                {
+                    "All", "Name", "Description", "Status", "Location"
+                };
+            displayViewModel.FilterItems = new List<string>()
+                {
+                    "Scope", "StartDate"
+                };
+            return View("Display", displayViewModel);
+        }
+
+        [HttpPost("Filter")]
+        public async Task<IActionResult> Filter(DisplayViewModel<Tournament> displayViewModel)
+        {
+            var res = await _tournamentService.FilterAsync(displayViewModel.SelectedSearchOption, displayViewModel.SelectedFrom, displayViewModel.SelectedTo);
+            displayViewModel.Entities = (ICollection<Tournament>)res.Data;
+            displayViewModel.SearchItems = new List<string>()
+                {
+                    "All", "Name", "Description", "Status", "Location"
+                };
+            displayViewModel.FilterItems = new List<string>()
+                {
+                    "Scope", "StartDate"
+                };
+            return View("Display", displayViewModel);
         }
 
         [HttpPost("Create")]
@@ -95,7 +112,6 @@ namespace KnightTournament.Controllers
             }
 
             return RedirectToAction("Display", "Tournament");
-            //return RedirectToAction("Index", "Home");
         }
 
         [HttpGet("Update/{id}")]

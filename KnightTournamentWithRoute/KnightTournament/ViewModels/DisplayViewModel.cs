@@ -9,5 +9,13 @@
         public string SelectedSearchOption { get; set; }
 
         public string SearchString { get; set; }
+
+        public List<string> FilterItems { get; set; }
+
+        public string SelectedFrom { get; set; }
+
+        public string SelectedTo { get; set; }
+
+        public string SelectedFilterOption { get; set; }
     }
 }

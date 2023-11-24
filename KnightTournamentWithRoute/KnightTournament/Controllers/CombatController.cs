@@ -12,9 +12,12 @@ namespace KnightTournament.Controllers
     {
         private readonly CombatService _combatService;
 
-        public CombatController(CombatService combatService)
+        private readonly CombatKnightService _combatKnightService;
+
+        public CombatController(CombatService combatService, CombatKnightService combatKnightService)
         {
             _combatService = combatService;
+            _combatKnightService = combatKnightService;
         }
 
         [HttpGet("Display")]
@@ -33,21 +36,6 @@ namespace KnightTournament.Controllers
             ViewBag.roundId = roundId;
             return View(displayCombatsViewModel);
         }
-
-        //[HttpGet("Details/{id}")]
-        //public async Task<IActionResult> Details(Guid id)
-        //{
-        //    var getByIdResult = await _combatService.GetByIdAsync(id);
-        //    if (!getByIdResult.IsSuccessful)
-        //    {
-        //        return RedirectToAction("Error");
-        //    }
-
-        //    var combatDetailsViewModel = new CombatDetailsViewModel();
-        //    getByIdResult.Data.MapTo(ref combatDetailsViewModel);
-        //    combatDetailsViewModel.PathToImage = combatDetailsViewModel.Type.SetImgToType();
-        //    return View(combatDetailsViewModel);
-        //}
 
         [HttpGet("Create")]
         public IActionResult Create(Guid roundId)
@@ -117,6 +105,24 @@ namespace KnightTournament.Controllers
 
 
             return RedirectToAction("Display", "Combat", routeValues: new { roundId = roundId });
+        }
+
+        [HttpGet("Finish/{id}")]
+        public async Task<IActionResult> Finish(Guid id) 
+        {
+            var combat = (await _combatService.GetByIdAsync(id)).Data;
+            Random random = new Random();   
+            var combatKnights = await _combatKnightService.GetAllAsync(combKnight=>combKnight.CombatId == id);
+            foreach (var item in combatKnights.Data)
+            {
+                item.Points = random.Next(10, 40);
+                await _combatKnightService.UpdateAsync(item.Id, item);
+            }
+
+            combat.IsFinished = true;
+            await _combatService.UpdateAsync(id, combat);
+
+            return RedirectToAction("Display", "Combat", new { roundId = combat.RoundId});
         }
     }
 }

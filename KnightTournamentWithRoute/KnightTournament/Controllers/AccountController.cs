@@ -79,39 +79,5 @@ namespace KnightTournament.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-
-        //[HttpGet]
-        //[Route("ForgotPassword")]
-        //public async Task<IActionResult> ForgotPassword()
-        //{
-        //    var user = (await _userManager.GetUserAsync(User));
-        //    var forgotPasswordVM = new ForgotPasswordViewModel() { Email = user.Email };
-        //    ForgotPasswordViewModel.CorrectCode = new Random().Next(1000, 9999).ToString();
-        //    return View(forgotPasswordVM);
-        //}
-        //[HttpPost]
-        //[Route("ForgotPassword")]
-        //public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
-        //{
-        //    if (forgotPasswordViewModel.Code == ForgotPasswordViewModel.CorrectCode)
-        //    {
-        //        return RedirectToAction("ChangePassword");
-        //    }
-        //    return RedirectToAction("Index", "Home");
-        //}
-        //[HttpGet]
-        //[Route("ChangePassword")]
-        //public async Task<IActionResult> ChangePassword()
-        //{
-        //    return View(new ChangePasswordViewModel());
-        //}
-        //[HttpPost]
-        //[Route("ChangePassword")]
-        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    await _userManager.ChangePasswordAsync(user, user.PasswordHash, changePasswordViewModel.Password);
-        //    return RedirectToAction("Index", "Home");
-        //}
     }
 }

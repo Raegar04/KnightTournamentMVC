@@ -49,7 +49,7 @@ namespace KnightTournament.DAL
 
             builder.Entity<AppUser>()
            .HasMany(t => t.Combats)
-           .WithMany(u => u.AssignedKnights)
+           .WithMany(u => u.AppUsers)
            .UsingEntity<CombatsKnight>(
                j => j.HasOne(tu => tu.Combat)
                    .WithMany()
@@ -57,7 +57,7 @@ namespace KnightTournament.DAL
                    .OnDelete(DeleteBehavior.Restrict),
                j => j.HasOne(tu => tu.Knight)
                    .WithMany()
-                   .HasForeignKey(tu => tu.KnightId)
+                   .HasForeignKey(tu => tu.AppUserId)
                    .OnDelete(DeleteBehavior.Restrict),
                j =>
                {

@@ -1,4 +1,6 @@
-﻿namespace KnightTournament.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace KnightTournament.Models
 {
     public class CombatsKnight
     {
@@ -6,11 +8,11 @@
 
         public double Points { get; set; } = 0;
 
-        public virtual Guid CombatId { get; set; }
+        public virtual Guid? CombatId { get; set; }
 
         public virtual Combat Combat { get; set; }
 
-        public virtual Guid KnightId { get; set; }
+        public virtual Guid? AppUserId { get; set; }
 
         public virtual AppUser Knight { get; set; }
     }

@@ -24,26 +24,21 @@ namespace KnightTournament.Controllers
         {
             //var tournamentId = TempData["TournamentId"];
             var getResult = await _roundService.GetAllAsync(round => round.TournamentId.ToString() == tournamentId.ToString());
-            var displayRoundsViewModel = new DisplayViewModel<Round>();
-            displayRoundsViewModel.Entities = (ICollection<Round>)getResult.Data;
+            var displayRoundsViewModel = new DisplayViewModel<Round>()
+            {
+                Entities = (ICollection<Round>)getResult.Data,
+                SearchItems = new List<string>()
+                {
+                    "All", "Name", "Description"
+                },
+                FilterItems = new List<string>()
+                {
+                    "StartDate", "EndDate"
+                }
+            };
             ViewBag.tournamentId = tournamentId;
             return View(displayRoundsViewModel);
         }
-
-        //[HttpGet("Details/{id}")]
-        //public async Task<IActionResult> Details(Guid id)
-        //{
-        //    var getByIdResult = await _roundService.GetByIdAsync(id);
-        //    if (!getByIdResult.IsSuccessful)
-        //    {
-        //        return RedirectToAction("Error");
-        //    }
-
-        //    var roundDetailsViewModel = new RoundDetailsViewModel();
-        //    getByIdResult.Data.MapTo(ref roundDetailsViewModel);
-        //    ViewBag.roundId = id;
-        //    return View(roundDetailsViewModel);
-        //}
 
         [HttpGet("Create")]
         public IActionResult Create(Guid tournamentId)
@@ -104,7 +99,6 @@ namespace KnightTournament.Controllers
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(Guid tournamentId, Guid id)
         {
-            //var tourId = (await _roundService.GetByIdAsync(id)).Data.TournamentId;
             var delete = await _roundService.DeleteAsync(id);
             if (!delete.IsSuccessful)
             {
@@ -113,6 +107,40 @@ namespace KnightTournament.Controllers
 
 
             return RedirectToAction("Display", "Round", routeValues: new { tournamentId = tournamentId });
+        }
+
+        [HttpPost("Search")]
+        public async Task<IActionResult> Search(DisplayViewModel<Round> displayViewModel, [FromQuery] Guid tournamentId)
+        {
+            var res = await _roundService.SearchAsync(displayViewModel.SelectedSearchOption, displayViewModel.SearchString, (round)=>round.TournamentId == tournamentId);
+            displayViewModel.Entities = (ICollection<Round>)res.Data;
+            displayViewModel.SearchItems = new List<string>()
+                {
+                    "All", "Name", "Description"
+                };
+            displayViewModel.FilterItems = new List<string>()
+                {
+                    "StartDate", "EndDate"
+                };
+            ViewBag.tournamentId = tournamentId;
+            return View("Display", displayViewModel);
+        }
+
+        [HttpPost("Filter")]
+        public async Task<IActionResult> Filter(DisplayViewModel<Round> displayViewModel, [FromQuery] Guid tournamentId)
+        {
+            var res = await _roundService.FilterAsync(displayViewModel.SelectedSearchOption, displayViewModel.SelectedFrom, displayViewModel.SelectedTo, (round) => round.TournamentId == tournamentId);
+            displayViewModel.Entities = (ICollection<Round>)res.Data;
+            displayViewModel.SearchItems = new List<string>()
+                {
+                    "All", "Name", "Description"
+                };
+            displayViewModel.FilterItems = new List<string>()
+                {
+                    "StartDate", "EndDate"
+                };
+            ViewBag.tournamentId = tournamentId;
+            return View("Display", displayViewModel);
         }
     }
 }

@@ -13,5 +13,11 @@
         public string ImgUri { get; set; }
 
         public virtual ICollection<Tournament> Tournaments { get; set; }
+
+
+        public override string ToString()
+        {
+            return $"{Country}. {City}. {Place}";
+        }
     }
 }

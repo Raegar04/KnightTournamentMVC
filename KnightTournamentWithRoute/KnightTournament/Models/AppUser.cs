@@ -17,7 +17,7 @@ namespace KnightTournament.Models
 
         public virtual ICollection<Trophy>? Trophies { get; set; }
 
-        public virtual ICollection<Combat>? Combats { get; set; } 
+        public virtual ICollection<Combat> Combats { get; set; } 
 
         public virtual ICollection<Tournament> Tournaments { get; set; } 
 

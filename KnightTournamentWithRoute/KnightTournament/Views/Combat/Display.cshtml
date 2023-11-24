@@ -2,8 +2,11 @@
 @using KnightTournament.ViewModels;
 @model DisplayViewModel<CombatDetailsViewModel>
 @inject RoundService _roundService;
+@inject CombatService _combatService;
 @{
-    var round =  (await _roundService.GetByIdAsync(ViewBag.roundId)).Data;
+    var round = (await _roundService.GetByIdAsync(ViewBag.roundId)).Data;
+    var isHolder = await _combatService.IsHolder(round.Id, User);
+    var showOverlay = false;
 }
 <style>
     .tournament-list {
@@ -16,7 +19,7 @@
     .tournament-item {
         border: 1px solid #ccc;
         padding: 10px;
-/*         width: 30%; */
+        /*         width: 30%; */
         box-sizing: border-box;
     }
 
@@ -28,7 +31,12 @@
 <div>
     <p>
         <a asp-action="Display" asp-controller="Round" asp-route-tournamentId="@round.TournamentId" class="btn btn-primary"><span>&#10094; </span>Back to rounds</a>
-        <a asp-action="Create" asp-controller="Combat" asp-route-roundId="@ViewBag.roundId" class="btn btn-outline-primary">Create new</a>
+
+        @if (isHolder)
+        {
+            <a asp-action="Create" asp-controller="Combat" asp-route-roundId="@ViewBag.roundId" class="btn btn-outline-primary">Create new</a>
+
+        }
     </p>
 </div>
 <div class="tournament-list">
@@ -39,10 +47,24 @@
                 <h2>@combat.Type</h2>
                 <p>Start Date:@combat.StartDate</p>
                 <p>End Date:@combat.EndDate</p>
-                <div class="operations">
-                    <a asp-controller="Combat" asp-action="Delete" asp-route-id="@combat.Id" asp-route-roundId="@combat.RoundId" class="btn btn-danger">Delete</a>
-                    <a asp-controller="Combat" asp-action="Update" asp-route-id="@combat.Id" asp-route-roundId="@combat.RoundId" class="btn btn-primary">Update</a>
-                </div>
+                @if (isHolder)
+                {
+                    <div class="operations">
+                        <a asp-controller="Combat" asp-action="Delete" asp-route-id="@combat.Id" asp-route-roundId="@combat.RoundId" class="btn btn-danger">Delete</a>
+                        <a asp-controller="Combat" asp-action="Update" asp-route-id="@combat.Id" asp-route-roundId="@combat.RoundId" class="btn btn-primary">Update</a>
+                        @if (combat.IsFinished)
+                        {
+                            <span class="btn btn-dark">Finished</span>
+                        }
+                        else
+                        {
+                                                       <a asp-controller="Combat" asp-action="Finish" asp-route-id="@combat.Id"  class="btn btn-dark">Finish</a>
+ 
+                        }
+
+                    </div>
+                }
+
             </div>
             <div class="tournament-item">
                 <img id="combatTypeImage" src="@combat.PathToImage" alt="Combat Type Image" style="max-width:160px; max-height:160px" />

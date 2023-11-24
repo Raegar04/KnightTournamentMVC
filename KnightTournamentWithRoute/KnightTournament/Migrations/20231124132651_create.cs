@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KnightTournament.Migrations
 {
     /// <inheritdoc />
-    public partial class createdb : Migration
+    public partial class create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -278,6 +278,7 @@ namespace KnightTournament.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
+                    IsFinished = table.Column<bool>(type: "bit", nullable: false),
                     RoundId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -324,14 +325,14 @@ namespace KnightTournament.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Points = table.Column<double>(type: "float", nullable: false),
                     CombatId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    KnightId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AppUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CombatsKnights", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CombatsKnights_AspNetUsers_KnightId",
-                        column: x => x.KnightId,
+                        name: "FK_CombatsKnights_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -388,14 +389,14 @@ namespace KnightTournament.Migrations
                 column: "RoundId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CombatsKnights_AppUserId",
+                table: "CombatsKnights",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CombatsKnights_CombatId",
                 table: "CombatsKnights",
                 column: "CombatId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CombatsKnights_KnightId",
-                table: "CombatsKnights",
-                column: "KnightId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_KnightOwnerId",

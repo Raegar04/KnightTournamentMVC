@@ -13,6 +13,8 @@ namespace KnightTournament.ViewModels
 
         public CombatType Type { get; set; }
 
+        public bool IsFinished { get; set; }
+
         public virtual Guid RoundId { get; set; }
 
         public string ErrorMessage { get; set; }

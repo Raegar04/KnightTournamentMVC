@@ -1,8 +1,11 @@
 ﻿using KnightTournament.BLL.Abstractions;
 using KnightTournament.DAL;
+using KnightTournament.Extensions;
 using KnightTournament.Helpers;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace KnightTournament.BLL.Implementations
 {
@@ -30,7 +33,7 @@ namespace KnightTournament.BLL.Implementations
 
         public virtual async Task<Result<IEnumerable<TEntity>>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null)
         {
-            var res =  await _repository.GetAllAsync(filter);
+            var res = await _repository.GetAllAsync(filter);
             if (!res.IsSuccessful)
             {
                 return new Result<IEnumerable<TEntity>>(true, new List<TEntity>());
@@ -52,6 +55,83 @@ namespace KnightTournament.BLL.Implementations
             }
 
             return _repository.UpdateItemAsync(id, updatedEntity);
+        }
+
+        public virtual async Task<Result<IEnumerable<TEntity>>> SearchAsync(string propertyName, string value, Expression<Func<TEntity, bool>>? filter = null)
+        {
+            var result = await _repository.GetAllAsync(filter);
+            if (value is null)
+            {
+                return result;
+            }
+            var entityType = typeof(TEntity);
+            if (propertyName == "All")
+            {
+                return await SearchByAllAsync(value, filter);
+            }
+            var property = entityType.GetProperty(propertyName);
+
+            var entities = new List<TEntity>();
+            foreach (var entity in result.Data)
+            {
+                var propValue = property.GetValue(entity).ToString();
+                if (propValue.Contains(value))
+                {
+                    entities.Add(entity);
+                }
+
+            }
+
+            return new Result<IEnumerable<TEntity>>(true, entities);
+        }
+
+        private async Task<Result<IEnumerable<TEntity>>> SearchByAllAsync(string value, Expression<Func<TEntity, bool>>? filter = null)
+        {
+            var entityType = typeof(TEntity);
+            var result = await _repository.GetAllAsync(filter);
+            var entities = new List<TEntity>();
+            foreach (var property in entityType.GetProperties())
+            {
+                if (!property.GetGetMethod().IsVirtual)
+                {
+                    foreach (var entity in result.Data)
+                    {
+                        var propValue = property.GetValue(entity).ToString();
+                        if (propValue.Contains(value))
+                        {
+                            entities.Add(entity);
+                        }
+
+                    }
+                }
+
+            }
+
+            return new Result<IEnumerable<TEntity>>(true, entities);
+        }
+
+        public async Task<Result<IEnumerable<TEntity>>> FilterAsync(string propertyName, string valueFrom, string valueTo, Expression<Func<TEntity, bool>>? filter = null)
+        {
+            var entityType = typeof(TEntity);
+            var result = await _repository.GetAllAsync(filter);
+            var property = entityType.GetProperty(propertyName);
+            if (valueFrom is null && valueTo is null)
+            {
+                return result;
+            }
+
+            var entities = new List<TEntity>();
+            foreach (var entity in result.Data)
+            {
+                var propValue = property.GetValue(entity).ToString();
+                if (propValue.CompareObjectsExtension(valueFrom, valueTo))
+                {
+                    entities.Add(entity);
+                }
+
+            }
+
+            return new Result<IEnumerable<TEntity>>(true, entities);
         }
     }
 }

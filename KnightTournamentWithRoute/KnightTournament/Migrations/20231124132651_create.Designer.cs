@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KnightTournament.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231122141853_Change-Many-to-many")]
-    partial class ChangeManytomany
+    [Migration("20231124132651_create")]
+    partial class create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -109,6 +109,9 @@ namespace KnightTournament.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsFinished")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("RoundId")
                         .HasColumnType("uniqueidentifier");
 
@@ -131,10 +134,12 @@ namespace KnightTournament.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CombatId")
+                    b.Property<Guid?>("AppUserId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("KnightId")
+                    b.Property<Guid?>("CombatId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Points")
@@ -142,9 +147,9 @@ namespace KnightTournament.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CombatId");
+                    b.HasIndex("AppUserId");
 
-                    b.HasIndex("KnightId");
+                    b.HasIndex("CombatId");
 
                     b.ToTable("CombatsKnights", (string)null);
                 });
@@ -463,16 +468,16 @@ namespace KnightTournament.Migrations
 
             modelBuilder.Entity("KnightTournament.Models.CombatsKnight", b =>
                 {
+                    b.HasOne("KnightTournament.Models.AppUser", "Knight")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("KnightTournament.Models.Combat", "Combat")
                         .WithMany()
                         .HasForeignKey("CombatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KnightTournament.Models.AppUser", "Knight")
-                        .WithMany()
-                        .HasForeignKey("KnightId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Combat");
@@ -524,13 +529,13 @@ namespace KnightTournament.Migrations
                     b.HasOne("KnightTournament.Models.AppUser", "Knight")
                         .WithMany()
                         .HasForeignKey("KnightId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("KnightTournament.Models.Tournament", "Tournament")
                         .WithMany()
                         .HasForeignKey("TournamentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Knight");

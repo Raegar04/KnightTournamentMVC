@@ -1,4 +1,5 @@
-﻿using KnightTournament.Models;
+﻿using KnightTournament.Extensions;
+using KnightTournament.Models;
 using KnightTournament.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

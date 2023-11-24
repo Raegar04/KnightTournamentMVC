@@ -17,7 +17,7 @@ namespace KnightTournament.BLL.Implementations
             {
                 foreach (var combat in round.Combats)
                 {
-                    await _repository.dbSet.AddAsync(new CombatsKnight() { CombatId = combat.Id, KnightId = userId });
+                    await _repository.dbSet.AddAsync(new CombatsKnight() { CombatId = combat.Id, AppUserId = userId });
                 }
             }
 
