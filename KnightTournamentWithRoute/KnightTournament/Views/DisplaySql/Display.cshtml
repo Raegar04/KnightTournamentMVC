@@ -26,9 +26,9 @@
 <div>
     <form method="post" asp-action="Search" asp-controller="DisplaySql">
         <textarea asp-for="Query" placeholder="@Model.Query" class="form-control"></textarea><br />
-        <select asp-for="SelectedEntityType" asp-items="new SelectList((IEnumerable<Type>)ViewBag.Items, nameof(Type.Name), nameof(Type.Name))" class="form-control">
+@*         <select asp-for="SelectedEntityType" asp-items="new SelectList((IEnumerable<Type>)ViewBag.Items, nameof(Type.Name), nameof(Type.Name))" class="form-control">
             <option value="">Select Entity Type</option>
-        </select>
+        </select> *@
         <br/>
         <button type="submit" class="btn btn-primary">Select</button>
     </form>

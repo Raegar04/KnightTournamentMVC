@@ -100,7 +100,6 @@
 <div class="tournament-list">
     @foreach (var tournament in Model.Entities)
     {
-        @* var id = tournament.Id; *@
         var knights = tournament.Knights;
 
         <div class="tournament-item">
@@ -132,35 +131,17 @@
                     <h2> Options:</h2>
                     <a asp-controller="Tournament" asp-action="Update" asp-route-id="@tournament.Id" class="btn btn-primary">Update</a>
                     <a asp-controller="Tournament" asp-action="Delete" asp-route-id="@tournament.Id" class="btn btn-danger">Delete</a>
-                    <button id="@tournament.Id" onclick="showForm()" type="button" class="btn btn-dark">Applied Users</button>
-                    @*<div class="overlay" id="@tournament.Id">
-            <div id="form-container">
-            <h4>Applied Users</h4>
-            @foreach (var user in tournament.Knights)
-            {
-            <p>@user.UserName<span>Rank:@user.Rank</span></p>
-            <br />
-            }
+                    <a asp-controller="Tournament" asp-action="Users" asp-route-tournamentId="@tournament.Id" class="btn btn-dark">Applied Users</a>                    
+                    @if (tournament.IsFinished)
+                    {
+                        <span  class="btn btn-light">Finished</span>
 
-            <button type="button" onclick="closeForm()" class="btn btn-danger">Close</button>
-            </div>
-            </div>
-            <script>
-            function showForm() {
-            const id = document.getElementById("tour-info").ariaPlaceholder;
-            var overlay = document.getElementById(id);
-            overlay.style.display = 'flex';
+                    }
+                    else
+                    {
+                        <a asp-controller="Tournament" asp-action="Finish" asp-route-tournamentId="@tournament.Id" class="btn btn-light">Finish</a>
 
-            document.body.style.overflow = 'hidden';
-            }
-
-            function closeForm() {
-            const id = document.getElementById("tour-info").ariaPlaceholder;
-            var overlay = document.getElementById(id);
-            overlay.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            }
-            </script> *@
+                    }
 
                 }
                 else if (resultHolderId.IsSuccessful && resultHolderId.Data != tournament.HolderId)

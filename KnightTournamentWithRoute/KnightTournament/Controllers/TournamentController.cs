@@ -48,6 +48,14 @@ namespace KnightTournament.Controllers
             return View(displayTournamentsViewModel);
         }
 
+        [HttpGet("Users")]
+        public async Task<IActionResult> Users(Guid tournamentId)
+        {
+            var tournament = (await _tournamentService.GetByIdAsync(tournamentId)).Data;
+            var vm = new AppliedUsersViewModel() { Users = tournament.Knights.ToList() };
+            return View(vm);
+        }
+
         [HttpGet("Create")]
         public IActionResult Create()
         {
@@ -147,6 +155,15 @@ namespace KnightTournament.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             await _tournamentService.DeleteAsync(id);
+            return RedirectToAction("Display", "Tournament");
+        }
+
+        [HttpGet("Finish")]
+        public async Task<IActionResult> Finish(Guid tournamentId)
+        {
+            var tournament = (await _tournamentService.GetByIdAsync(tournamentId)).Data;
+            await _tournamentService.Finish(tournament);
+
             return RedirectToAction("Display", "Tournament");
         }
     }

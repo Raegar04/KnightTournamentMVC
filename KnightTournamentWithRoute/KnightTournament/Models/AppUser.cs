@@ -11,7 +11,7 @@ namespace KnightTournament.Models
         [DisallowSimilar]
         public override string? UserName { get; set; }
 
-        public double Rating { get; set; }
+        public int Rating { get; set; }
 
         public virtual ICollection<Notification> Notifications { get; set; }
 

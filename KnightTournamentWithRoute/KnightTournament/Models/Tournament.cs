@@ -16,6 +16,8 @@ namespace KnightTournament.Models
 
         public DateTime StartDate { get; set; }
 
+        public bool IsFinished { get; set; } = false;
+
         public Status Status { get; set; } = Status.Planned;
 
         public virtual ICollection<Round> Rounds { get; set; }

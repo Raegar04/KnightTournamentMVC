@@ -1,4 +1,5 @@
 ﻿using KnightTournament.BLL.Abstractions;
+using KnightTournament.Extensions;
 using KnightTournament.Helpers;
 using KnightTournament.Models;
 using KnightTournament.ViewModels;
@@ -67,7 +68,7 @@ namespace KnightTournament.Controllers
         public async Task<IActionResult> Search(SelectEntityViewModel selectEntityViewModel)
         {
             TempData["Query"] = selectEntityViewModel.Query;
-            TempData["Type"] = selectEntityViewModel.SelectedEntityType;
+            TempData["Type"] = selectEntityViewModel.Query.GetSelectedEntityType();
             return RedirectToAction("Display");
 
 

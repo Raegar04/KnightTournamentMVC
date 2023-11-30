@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KnightTournament.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231124132651_create")]
+    [Migration("20231125095818_create")]
     partial class create
     {
         /// <inheritdoc />
