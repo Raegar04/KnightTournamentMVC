@@ -100,60 +100,60 @@
 <div class="tournament-list">
     @foreach (var tournament in Model.Entities)
     {
-        var knights = tournament.Knights;
+        var knights = tournament.Tournament_Knights;
 
         <div class="tournament-item">
-            <input type="hidden" id="tour-info" placeholder="@tournament.Id" />
-            <h2>@tournament.Name</h2>
-            <p>@tournament.Description</p>
-            <p>Scope: @tournament.Scope</p>
-            <p>Start Date: @tournament.StartDate</p>
-            <p>Location: @tournament.Location.Country. @tournament.Location.City. @tournament.Location.Place</p>
-            <p>Status: @tournament.Status</p>
+            <input type="hidden" id="tour-info" placeholder="@tournament.Tournament_Id" />
+            <h2>@tournament.Tournament_Name</h2>
+            <p>@tournament.Tournament_Description</p>
+            <p>Scope: @tournament.Tournament_Scope</p>
+            <p>Start Date: @tournament.Tournament_StartDate</p>
+            <p>Location: @tournament.Tournament_Location.Location_Country. @tournament.Tournament_Location.Location_City. @tournament.Tournament_Location.Location_Place</p>
+            <p>Status: @tournament.Tournament_Status</p>
             <div class="operations">
-                @if (tournament.Rounds != null && tournament.Rounds.Count > 0)
+                @if (tournament.Tournament_Rounds != null && tournament.Tournament_Rounds.Count > 0)
                 {
-                    <h4>Tournament consists of @tournament.Rounds.Count rounds.</h4>
-                    <a class="btn btn-outline-primary" asp-action="Display" asp-controller="Round" asp-route-tournamentId="@tournament.Id">View</a>
+                    <h4>Tournament consists of @tournament.Tournament_Rounds.Count rounds.</h4>
+                    <a class="btn btn-outline-primary" asp-action="Display" asp-controller="Round" asp-route-tournamentId="@tournament.Tournament_Id">View</a>
                 }
                 else
                 {
                     <p>No rounds available for this tournament.</p>
-                    @if (resultHolderId.IsSuccessful && resultHolderId.Data == tournament.HolderId)
+                    @if (resultHolderId.IsSuccessful && resultHolderId.Data == tournament.Tournament_HolderId && !tournament.Tournament_IsFinished)
                     {
-                        <p><a href="@Url.Action("Create", "Round", new { tournamentId = tournament.Id})" class="btn btn-outline-primary">Create</a></p>
+                        <p><a href="@Url.Action("Create", "Round", new { tournamentId = tournament.Tournament_Id})" class="btn btn-outline-primary">Create</a></p>
                     }
                 }
             </div><br />
             <div class="operations">
-                @if (resultHolderId.IsSuccessful && resultHolderId.Data == tournament.HolderId)
+                @if (resultHolderId.IsSuccessful && resultHolderId.Data == tournament.Tournament_HolderId)
                 {
                     <h2> Options:</h2>
-                    <a asp-controller="Tournament" asp-action="Update" asp-route-id="@tournament.Id" class="btn btn-primary">Update</a>
-                    <a asp-controller="Tournament" asp-action="Delete" asp-route-id="@tournament.Id" class="btn btn-danger">Delete</a>
-                    <a asp-controller="Tournament" asp-action="Users" asp-route-tournamentId="@tournament.Id" class="btn btn-dark">Applied Users</a>                    
-                    @if (tournament.IsFinished)
+                    <a asp-controller="Tournament" asp-action="Update" asp-route-id="@tournament.Tournament_Id" class="btn btn-primary">Update</a>
+                    <a asp-controller="Tournament" asp-action="Delete" asp-route-id="@tournament.Tournament_Id" class="btn btn-danger">Delete</a>
+                  
+                    @if (tournament.Tournament_IsFinished)
                     {
                         <span  class="btn btn-light">Finished</span>
 
                     }
                     else
                     {
-                        <a asp-controller="Tournament" asp-action="Finish" asp-route-tournamentId="@tournament.Id" class="btn btn-light">Finish</a>
+                        <a asp-controller="Tournament" asp-action="Finish" asp-route-tournamentId="@tournament.Tournament_Id" class="btn btn-light">Finish</a>
 
                     }
 
                 }
-                else if (resultHolderId.IsSuccessful && resultHolderId.Data != tournament.HolderId)
+                else if (resultHolderId.IsSuccessful && resultHolderId.Data != tournament.Tournament_HolderId)
                 {
-                    @if (tournament.Knights.Any(knight => knight.Id == resultHolderId.Data))
+                    @if (tournament.Tournament_Knights.Any(knight => knight.Id == resultHolderId.Data))
                     {
                         <span class="text text-primary">Applied</span>
                     }
                     else
                     {
                         <h4> Options:</h4>
-                        <a asp-controller="TournamentKnight" asp-action="Apply" asp-route-tournamentId="@tournament.Id" class="btn btn-primary">Apply</a>
+                        <a asp-controller="TournamentKnight" asp-action="Apply" asp-route-tournamentId="@tournament.Tournament_Id" class="btn btn-primary">Apply</a>
                     }
                 }
             </div><br />

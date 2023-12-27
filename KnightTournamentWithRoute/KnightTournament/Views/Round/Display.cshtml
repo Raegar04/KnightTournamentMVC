@@ -85,15 +85,15 @@
 <div class="tournament-list">
     @foreach (var round in Model.Entities)
     {
-        var trophy = round.Trophy;
+        var trophy = round.Round_Trophy;
         var isHolded = resultHolderId.Data == tournament.HolderId;
         <div class="tournament-item">
             <div>
                 
-                <h2>@round.Name</h2>
-                <p>@round.Description</p>
-                <p>Start Date:@round.StartDate</p>
-                <p>End Date:@round.EndDate</p>
+                <h2>@round.Round_Name</h2>
+                <p>@round.Round_Description</p>
+                <p>Start Date:@round.Round_StartDate</p>
+                <p>End Date:@round.Round_EndDate</p>
                 
             </div><br />
             <div>
@@ -103,7 +103,7 @@
                         <h4>Round hasn't trophy</h4>
                         @if (isHolded)
                         {
-                                                    <a class="btn btn-outline-primary" asp-action="Create" asp-controller="Trophy" asp-route-roundId="@round.Id">Add trophy</a>
+                                                    <a class="btn btn-outline-primary" asp-action="Create" asp-controller="Trophy" asp-route-roundId="@round.Round_Id">Add trophy</a>
 
                         }
                     </div>
@@ -125,10 +125,10 @@
                 }
             </div><br />
             <div>
-                @if (round.Combats != null && round.Combats.Count > 0)
+                @if (round.Round_Combats != null && round.Round_Combats.Count > 0)
                 {
-                    <h4>There are @round.Combats.Count Combats</h4>
-                    <a class="btn btn-outline-primary" asp-action="Display" asp-controller="Combat" asp-route-roundId="@round.Id">View</a>
+                    <h4>There are @round.Round_Combats.Count Combats</h4>
+                    <a class="btn btn-outline-primary" asp-action="Display" asp-controller="Combat" asp-route-roundId="@round.Round_Id">View</a>
                 }
                 else
                 {
@@ -136,7 +136,7 @@
                     if (isHolded)
                     {
                          
-                    <p><a href="@Url.Action("Create", "Combat", new { roundId = round.Id})" class="btn btn-outline-primary">Create</a></p>
+                    <p><a href="@Url.Action("Create", "Combat", new { roundId = round.Round_Id})" class="btn btn-outline-primary">Create</a></p>
                     }
                    
                 }
@@ -148,8 +148,8 @@
                 <h2>Options:</h2>
             <div class="operations" style="display:inline-flex">
                
-                <a asp-controller="Round" asp-action="Update" asp-route-id="@round.Id" class="btn btn-primary">Update</a>
-                <a asp-controller="Round" asp-action="Delete" asp-route-id="@round.Id" asp-route-tournamentId="@round.TournamentId" class="btn btn-danger">Delete</a>
+                <a asp-controller="Round" asp-action="Update" asp-route-id="@round.Round_Id" class="btn btn-primary">Update</a>
+                <a asp-controller="Round" asp-action="Delete" asp-route-id="@round.Round_Id" asp-route-tournamentId="@round.Round_TournamentId" class="btn btn-danger">Delete</a>
 
             </div>
             }

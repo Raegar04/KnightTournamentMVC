@@ -6,21 +6,19 @@ namespace KnightTournament.Models
 {
     public class AppUser: IdentityUser<Guid>
     {
-        public Rank Rank { get; set; }
+        public Rank User_Rank { get; set; }
 
         [DisallowSimilar]
         public override string? UserName { get; set; }
 
-        public int Rating { get; set; }
+        public int User_Rating { get; set; }
 
-        public virtual ICollection<Notification> Notifications { get; set; }
+        public virtual ICollection<Trophy>? User_Trophies { get; set; }
 
-        public virtual ICollection<Trophy>? Trophies { get; set; }
+        public virtual ICollection<Combat> User_Combats { get; set; } 
 
-        public virtual ICollection<Combat> Combats { get; set; } 
+        public virtual ICollection<Tournament> User_Tournaments { get; set; } 
 
-        public virtual ICollection<Tournament> Tournaments { get; set; } 
-
-        public virtual ICollection<Tournament> HoldedTournaments { get; set; }
+        public virtual ICollection<Tournament> User_HoldedTournaments { get; set; }
     }
 }

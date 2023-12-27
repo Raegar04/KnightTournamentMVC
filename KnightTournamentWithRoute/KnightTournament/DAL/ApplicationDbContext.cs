@@ -19,18 +19,18 @@ namespace KnightTournament.DAL
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Round>().HasOne(e => e.Trophy).WithOne(e => e.Round);
-            builder.Entity<Location>().HasMany(e => e.Tournaments).WithOne(e => e.Location).IsRequired(false);
-            builder.Entity<Tournament>().HasOne(e => e.Location).WithMany(e => e.Tournaments).HasForeignKey(e => e.LocationId).IsRequired(false);
+            builder.Entity<Round>().HasOne(e => e.Round_Trophy).WithOne(e => e.Round);
+            builder.Entity<Location>().HasMany(e => e.Location_Tournaments).WithOne(e => e.Tournament_Location).IsRequired(false);
+            builder.Entity<Tournament>().HasOne(e => e.Tournament_Location).WithMany(e => e.Location_Tournaments).HasForeignKey(e => e.Tournament_LocationId).IsRequired(false);
 
-            builder.Entity<AppUser>().HasMany(e => e.Trophies).WithOne(e => e.Knight).IsRequired(false);
-            builder.Entity<Trophy>().HasOne(e => e.Knight).WithMany(e => e.Trophies).HasForeignKey(e => e.KnightId).IsRequired(false);
+            builder.Entity<AppUser>().HasMany(e => e.User_Trophies).WithOne(e => e.Knight).IsRequired(false);
+            builder.Entity<Trophy>().HasOne(e => e.Knight).WithMany(e => e.User_Trophies).HasForeignKey(e => e.KnightId).IsRequired(false);
 
-            builder.Entity<Tournament>().HasOne(e => e.Holder).WithMany(e => e.HoldedTournaments).HasForeignKey(e => e.HolderId);
+            builder.Entity<Tournament>().HasOne(e => e.Tournament_User).WithMany(e => e.User_HoldedTournaments).HasForeignKey(e => e.Tournament_HolderId);
 
             builder.Entity<Tournament>()
-           .HasMany(t => t.Knights)
-           .WithMany(u => u.Tournaments)
+           .HasMany(t => t.Tournament_Knights)
+           .WithMany(u => u.User_Tournaments)
             .UsingEntity<TournamentUsers>(
                 j => j.HasOne(tu => tu.Knight)
                     .WithMany()
@@ -48,25 +48,23 @@ namespace KnightTournament.DAL
             );
 
             builder.Entity<AppUser>()
-           .HasMany(t => t.Combats)
-           .WithMany(u => u.AppUsers)
+           .HasMany(t => t.User_Combats)
+           .WithMany(u => u.Combat_AppUsers)
            .UsingEntity<CombatsKnight>(
-               j => j.HasOne(tu => tu.Combat)
+               j => j.HasOne(tu => tu.CombatsKnight_Combat)
                    .WithMany()
-                   .HasForeignKey(tu => tu.CombatId)
+                   .HasForeignKey(tu => tu.CombatsKnight_CombatId)
                    .OnDelete(DeleteBehavior.Restrict),
-               j => j.HasOne(tu => tu.Knight)
+               j => j.HasOne(tu => tu.CombatsKnight_Knight)
                    .WithMany()
-                   .HasForeignKey(tu => tu.AppUserId)
+                   .HasForeignKey(tu => tu.CombatsKnight_AppUserId)
                    .OnDelete(DeleteBehavior.Restrict),
                j =>
                {
-                   j.HasKey(tu => tu.Id);
+                   j.HasKey(tu => tu.CombatsKnight_Id);
                    j.ToTable("CombatsKnights");
                }
            );
-
-            builder.Entity<AppUser>().HasMany(e => e.Notifications).WithOne(e => e.KnightOwner).HasForeignKey(e => e.KnightOwnerId);
 
             base.OnModelCreating(builder);
         }
@@ -79,8 +77,6 @@ namespace KnightTournament.DAL
             var config = builder.Build();
             return config.GetConnectionString("DefaultConnection");
         }
-        public virtual DbSet<Notification> Notifications { get; set; }
-
         public virtual DbSet<Tournament> Tournaments { get; set; }
 
         public virtual DbSet<Combat> Combats { get; set; }

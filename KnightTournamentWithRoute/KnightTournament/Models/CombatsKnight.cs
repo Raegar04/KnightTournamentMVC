@@ -4,16 +4,16 @@ namespace KnightTournament.Models
 {
     public class CombatsKnight
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid CombatsKnight_Id { get; set; } = Guid.NewGuid();
 
-        public int Points { get; set; } = 0;
+        public int CombatsKnight_Points { get; set; } = 0;
 
-        public virtual Guid? CombatId { get; set; }
+        public virtual Guid? CombatsKnight_CombatId { get; set; }
 
-        public virtual Combat Combat { get; set; }
+        public virtual Combat CombatsKnight_Combat { get; set; }
 
-        public virtual Guid? AppUserId { get; set; }
+        public virtual Guid? CombatsKnight_AppUserId { get; set; }
 
-        public virtual AppUser Knight { get; set; }
+        public virtual AppUser CombatsKnight_Knight { get; set; }
     }
 }

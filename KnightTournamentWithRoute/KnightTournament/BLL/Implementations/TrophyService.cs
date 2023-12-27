@@ -15,7 +15,7 @@ namespace KnightTournament.BLL.Implementations
         public async Task<Guid?> GetTournamentIdFromTrophy(Guid roundId) 
         {
             var round = (await _roundService.GetByIdAsync(roundId)).Data;
-            return round.TournamentId;
+            return round.Round_TournamentId;
         }
     }
 }

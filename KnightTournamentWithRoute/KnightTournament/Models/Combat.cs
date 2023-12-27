@@ -6,20 +6,20 @@ namespace KnightTournament.Models
     [Serializable]
     public class Combat
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Combat_Id { get; set; } = Guid.NewGuid();
 
-        public DateTime StartDate { get; set; }
+        public DateTime Combat_StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime Combat_EndDate { get; set; }
 
-        public CombatType Type { get; set; }
+        public CombatType Combat_Type { get; set; }
 
-        public bool IsFinished { get; set; } = false;
+        public bool Combat_IsFinished { get; set; } = false;
 
-        public virtual Guid RoundId { get; set; }
+        public virtual Guid Combat_RoundId { get; set; }
 
-        public virtual Round Round { get; set; }
+        public virtual Round Combat_Round { get; set; }
 
-        public virtual ICollection<AppUser> AppUsers { get; set; }
+        public virtual ICollection<AppUser> Combat_AppUsers { get; set; }
     }
 }

@@ -52,7 +52,7 @@ namespace KnightTournament.Controllers
         public async Task<IActionResult> Users(Guid tournamentId)
         {
             var tournament = (await _tournamentService.GetByIdAsync(tournamentId)).Data;
-            var vm = new AppliedUsersViewModel() { Users = tournament.Knights.ToList() };
+            var vm = new AppliedUsersViewModel() { Users = tournament.Tournament_Knights.ToList() };
             return View(vm);
         }
 
@@ -111,7 +111,7 @@ namespace KnightTournament.Controllers
                 TempData["Error"] = holderIdresult.Message;
                 return RedirectToAction("Create", "Tournament");
             }
-            tournament.HolderId = holderIdresult.Data;
+            tournament.Tournament_HolderId = holderIdresult.Data;
             var result = await _tournamentService.AddAsync(tournament);
             if (!result.IsSuccessful)
             {

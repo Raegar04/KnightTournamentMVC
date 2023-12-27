@@ -20,12 +20,12 @@ namespace KnightTournament.BLL.Implementations
 
         public override async Task<Result<bool>> DeleteAsync(Guid id)
         {
-            var combatKnightsResult = await _combatKnightService.GetAllAsync(combUser => combUser.CombatId == id);
+            var combatKnightsResult = await _combatKnightService.GetAllAsync(combUser => combUser.CombatsKnight_CombatId == id);
             if (combatKnightsResult.IsSuccessful)
             {
                 foreach (var item in combatKnightsResult.Data)
                 {
-                    var result = await _combatKnightService.DeleteAsync(item.Id);
+                    var result = await _combatKnightService.DeleteAsync(item.CombatsKnight_Id);
                 }
             }
 
@@ -36,7 +36,7 @@ namespace KnightTournament.BLL.Implementations
         {
             var userId = (user.GetUserIdFromPrincipal()).Data;
             var round = (await _roundService.GetByIdAsync(roundId)).Data;
-            if (round.Tournament.HolderId == userId)
+            if (round.Round_Tournament.Tournament_HolderId == userId)
             {
                 return true;
             }

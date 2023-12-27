@@ -23,7 +23,7 @@ namespace KnightTournament.Controllers
         public async Task<IActionResult> Display(Guid tournamentId)
         {
             //var tournamentId = TempData["TournamentId"];
-            var getResult = await _roundService.GetAllAsync(round => round.TournamentId.ToString() == tournamentId.ToString());
+            var getResult = await _roundService.GetAllAsync(round => round.Round_TournamentId.ToString() == tournamentId.ToString());
             var displayRoundsViewModel = new DisplayViewModel<Round>()
             {
                 Entities = (ICollection<Round>)getResult.Data,
@@ -64,7 +64,7 @@ namespace KnightTournament.Controllers
                 return RedirectToAction("Create", "Round");
             }
 
-            return RedirectToAction("Display", "Round", routeValues: new { tournamentId = round.TournamentId });
+            return RedirectToAction("Display", "Round", routeValues: new { tournamentId = round.Round_TournamentId });
         }
 
         [HttpGet("Update/{id}")]
@@ -93,7 +93,7 @@ namespace KnightTournament.Controllers
             tournamentDetailsViewModel.MapTo(ref round);
             await _roundService.UpdateAsync(id, round);
 
-            return RedirectToAction("Display", "Round", routeValues: new { tournamentId = round.TournamentId });
+            return RedirectToAction("Display", "Round", routeValues: new { tournamentId = round.Round_TournamentId });
         }
 
         [HttpGet("Delete/{id}")]
@@ -112,7 +112,7 @@ namespace KnightTournament.Controllers
         [HttpPost("Search")]
         public async Task<IActionResult> Search(DisplayViewModel<Round> displayViewModel, [FromQuery] Guid tournamentId)
         {
-            var res = await _roundService.SearchAsync(displayViewModel.SelectedSearchOption, displayViewModel.SearchString, (round)=>round.TournamentId == tournamentId);
+            var res = await _roundService.SearchAsync(displayViewModel.SelectedSearchOption, displayViewModel.SearchString, (round)=>round.Round_TournamentId == tournamentId);
             displayViewModel.Entities = (ICollection<Round>)res.Data;
             displayViewModel.SearchItems = new List<string>()
                 {
@@ -129,7 +129,7 @@ namespace KnightTournament.Controllers
         [HttpPost("Filter")]
         public async Task<IActionResult> Filter(DisplayViewModel<Round> displayViewModel, [FromQuery] Guid tournamentId)
         {
-            var res = await _roundService.FilterAsync(displayViewModel.SelectedSearchOption, displayViewModel.SelectedFrom, displayViewModel.SelectedTo, (round) => round.TournamentId == tournamentId);
+            var res = await _roundService.FilterAsync(displayViewModel.SelectedSearchOption, displayViewModel.SelectedFrom, displayViewModel.SelectedTo, (round) => round.Round_TournamentId == tournamentId);
             displayViewModel.Entities = (ICollection<Round>)res.Data;
             displayViewModel.SearchItems = new List<string>()
                 {

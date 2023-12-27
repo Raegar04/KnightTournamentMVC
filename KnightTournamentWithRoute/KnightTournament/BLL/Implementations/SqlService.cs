@@ -18,7 +18,10 @@ namespace KnightTournament.BLL.Implementations
 
         public async Task<Result<ICollection<TEntity>>> GetByQuery(string query)
         {
-
+            if (query.Split(' ').First().ToLower()!="select")
+            {
+                return new Result<ICollection<TEntity>>(false, "Invalid query");
+            }
             try
             {
                 var entities = await _entities.FromSqlRaw(query).ToListAsync();

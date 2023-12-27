@@ -13,11 +13,11 @@ namespace KnightTournament.BLL.Implementations
 
         public async Task<Result<bool>> AddUserToCombats(Tournament tournament, Guid userId)
         {
-            foreach (var round in tournament.Rounds)
+            foreach (var round in tournament.Tournament_Rounds)
             {
-                foreach (var combat in round.Combats)
+                foreach (var combat in round.Round_Combats)
                 {
-                    await _repository.dbSet.AddAsync(new CombatsKnight() { CombatId = combat.Id, AppUserId = userId });
+                    await _repository.dbSet.AddAsync(new CombatsKnight() { CombatsKnight_CombatId = combat.Combat_Id, CombatsKnight_AppUserId = userId });
                 }
             }
 

@@ -44,10 +44,10 @@
                     {
                         <div style="display:inline-flex; ">
                             <div class="item">
-                                <h2>@combat.Type</h2>
-                                <p>Start Date:@combat.StartDate</p>
-                                <p>End Date:@combat.EndDate</p>
-                                <p><a asp-action="Details" asp-controller="Combat" asp-route-id="@combat.Id" class="btn btn-info">Details</a></p>
+                                <h2>@combat.Combat_Type</h2>
+                                <p>Start Date:@combat.Combat_StartDate</p>
+                                <p>End Date:@combat.Combat_EndDate</p>
+                                <p><a asp-action="Details" asp-controller="Combat" asp-route-id="@combat.Combat_Id" class="btn btn-info">Details</a></p>
                             </div>
                         </div>
                         <br />
@@ -59,10 +59,10 @@
                     @foreach (var tournament in (List<Tournament>)entities)
                     {
                         <div class="item">
-                            <h2>@tournament.Name</h2>
-                            <p>Scope: @tournament.Scope</p>
-                            <p>Status: @tournament.Status</p>
-                            <p><a asp-action="Details" asp-controller="Tournament" asp-route-id="@tournament.Id" class="btn btn-info">Details</a></p>
+                            <h2>@tournament.Tournament_Name</h2>
+                            <p>Scope: @tournament.Tournament_Scope</p>
+                            <p>Status: @tournament.Tournament_Status</p>
+                            <p><a asp-action="Details" asp-controller="Tournament" asp-route-id="@tournament.Tournament_Id" class="btn btn-info">Details</a></p>
                         </div>
                     }
                 </div>
@@ -72,10 +72,10 @@
                     @foreach (var round in (List<Round>)entities)
                     {
                         <div class="item">
-                            <h2>@round.Name</h2>
-                            <p>Start Date:@round.StartDate</p>
-                            <p>End Date:@round.EndDate</p>
-                            <p><a asp-action="Details" asp-controller="Round" asp-route-id="@round.Id" class="btn btn-info">Details</a></p>
+                            <h2>@round.Round_Name</h2>
+                            <p>Start Date:@round.Round_StartDate</p>
+                            <p>End Date:@round.Round_EndDate</p>
+                            <p><a asp-action="Details" asp-controller="Round" asp-route-id="@round.Round_Id" class="btn btn-info">Details</a></p>
                         </div>
                         <br />
                     }

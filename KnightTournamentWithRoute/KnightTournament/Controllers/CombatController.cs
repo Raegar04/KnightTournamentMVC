@@ -24,7 +24,7 @@ namespace KnightTournament.Controllers
         public async Task<IActionResult> Display(Guid roundId)
         {
             //var tournamentId = TempData["TournamentId"];
-            var getResult = await _combatService.GetAllAsync(round => round.RoundId.ToString() == roundId.ToString());
+            var getResult = await _combatService.GetAllAsync(round => round.Combat_RoundId.ToString() == roundId.ToString());
             var displayCombatsViewModel = new DisplayViewModel<CombatDetailsViewModel>();
             var testCombatVM = new CombatDetailsViewModel();
             foreach (var combat in getResult.Data) 
@@ -61,7 +61,7 @@ namespace KnightTournament.Controllers
                 return RedirectToAction("Create", "Combat");
             }
 
-            return RedirectToAction("Display", "Combat", routeValues: new { roundId = combat.RoundId });
+            return RedirectToAction("Display", "Combat", routeValues: new { roundId = combat.Combat_RoundId });
         }
 
         [HttpGet("Update/{id}")]
@@ -90,7 +90,7 @@ namespace KnightTournament.Controllers
             combatDetailsViewModel.MapTo(ref combat);
             await _combatService.UpdateAsync(id, combat);
 
-            return RedirectToAction("Display", "Combat", routeValues: new { roundId = combat.RoundId });
+            return RedirectToAction("Display", "Combat", routeValues: new { roundId = combat.Combat_RoundId });
         }
 
         [HttpGet("Delete/{id}")]
@@ -112,17 +112,17 @@ namespace KnightTournament.Controllers
         {
             var combat = (await _combatService.GetByIdAsync(id)).Data;
             Random random = new Random();   
-            var combatKnights = await _combatKnightService.GetAllAsync(combKnight=>combKnight.CombatId == id);
+            var combatKnights = await _combatKnightService.GetAllAsync(combKnight=>combKnight.CombatsKnight_CombatId == id);
             foreach (var item in combatKnights.Data)
             {
-                item.Points = random.Next(10, 40);
-                await _combatKnightService.UpdateAsync(item.Id, item);
+                item.CombatsKnight_Points = random.Next(10, 40);
+                await _combatKnightService.UpdateAsync(item.CombatsKnight_Id, item);
             }
 
-            combat.IsFinished = true;
+            combat.Combat_IsFinished = true;
             await _combatService.UpdateAsync(id, combat);
 
-            return RedirectToAction("Display", "Combat", new { roundId = combat.RoundId});
+            return RedirectToAction("Display", "Combat", new { roundId = combat.Combat_RoundId});
         }
     }
 }

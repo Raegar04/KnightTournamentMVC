@@ -32,16 +32,16 @@ namespace KnightTournament.BLL.Implementations
             }
 
             var tournament = (await _repository.GetByIdAsync(id)).Data;
-            foreach (var round in tournament.Rounds)
+            foreach (var round in tournament.Tournament_Rounds)
             {
-                foreach (var combat in round.Combats)
+                foreach (var combat in round.Round_Combats)
                 {
-                    var combatKnightResult = await _combatKnightService.GetAllAsync(combKnight => combKnight.CombatId == combat.Id);
+                    var combatKnightResult = await _combatKnightService.GetAllAsync(combKnight => combKnight.CombatsKnight_CombatId == combat.Combat_Id);
                     if (combatKnightResult.IsSuccessful)
                     {
                         foreach (var item in combatKnightResult.Data)
                         {
-                            await _combatKnightService.DeleteAsync(item.Id);
+                            await _combatKnightService.DeleteAsync(item.CombatsKnight_Id);
                         }
                     }
 
@@ -53,29 +53,30 @@ namespace KnightTournament.BLL.Implementations
 
         public async Task Finish(Tournament tournament) 
         {
-            foreach (var round in tournament.Rounds)
+            foreach (var round in tournament.Tournament_Rounds)
             {
-                foreach (var combat in round.Combats)
+                foreach (var combat in round.Round_Combats)
                 {
-                    var combatKnights = (await _combatKnightService.GetAllAsync()).Data.Where(item => item.CombatId == combat.Id);
+
+                    var combatKnights = (await _combatKnightService.GetAllAsync(item => item.CombatsKnight_CombatId == combat.Combat_Id)).Data;
                     var dict = new Dictionary<Guid?, int>();
                     foreach (var combatKnight in combatKnights)
                     {
-                        if (dict.ContainsKey(combatKnight.AppUserId))
+                        if (dict.ContainsKey(combatKnight.CombatsKnight_AppUserId))
                         {
-                            dict[combatKnight.AppUserId] += combatKnight.Points;
+                            dict[combatKnight.CombatsKnight_AppUserId] += combatKnight.CombatsKnight_Points;
                         }
                     }
-                    var user = _userManager.Users.FirstOrDefault(user=>user.Id == dict.FirstOrDefault(i=>i.Value == dict.Values.Max()).Key);
-                    round.Trophy.KnightId = user.Id;
-                    user.Rating += Convert.ToInt32(round.Trophy.Value);
+                    var user = _userManager.Users.FirstOrDefault(user => user.Id == dict.FirstOrDefault(i => i.Value == dict.Values.Max()).Key);
+                    round.Round_Trophy.KnightId = user.Id;
+                    user.User_Rating += Convert.ToInt32(round.Round_Trophy.Value);
 
-                    await trophyService.UpdateAsync(round.Trophy.Id, round.Trophy);
+                    await trophyService.UpdateAsync(round.Round_Trophy.Id, round.Round_Trophy);
                     await _userManager.UpdateAsync(user);
                 }
             }
-            tournament.IsFinished = true;
-            _repository.UpdateItemAsync(tournament.Id, tournament);
+            tournament.Tournament_IsFinished = true;
+            _repository.UpdateItemAsync(tournament.Tournament_Id, tournament);
         }
     }
 }
