@@ -3,19 +3,19 @@ using KnightTournament.Models;
 
 namespace KnightTournament.ViewModels
 {
-    public class CombatDetailsViewModel
+    public class ResultsCombatPDF
     {
-        public Guid Id { get; set; }
+        public Guid Combat_Id { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime Combat_StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime Combat_EndDate { get; set; }
 
-        public CombatType Type { get; set; }
+        public CombatType Combat_Type { get; set; }
 
-        public bool IsFinished { get; set; }
+        public bool Combat_IsFinished { get; set; }
 
-        public virtual Guid RoundId { get; set; }
+        public virtual Guid Combat_RoundId { get; set; }
 
         public string ErrorMessage { get; set; }
 

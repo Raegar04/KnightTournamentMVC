@@ -12,9 +12,9 @@ namespace KnightTournament.ViewModels.AccountViewModels
         public string? Password { get; set; }
         public string? ConfirmPassword { get; set; }
 
-        public Rank Rank { get; set; }
+        public Rank User_Rank { get; set; }
 
-        public double Rating { get; set; }
+        public double User_Rating { get; set; }
         public string? ReturnUrl { get; set; }
     }
 }

@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KnightTournament.Models
 {
+    [PrimaryKey("CombatsKnight_Id")]
     public class CombatsKnight
     {
         public Guid CombatsKnight_Id { get; set; } = Guid.NewGuid();

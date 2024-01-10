@@ -1,0 +1,43 @@
+﻿@using KnightTournament.ViewModels;
+@model CombatPDF
+
+
+@{
+    Layout = null;
+}
+
+<link href="@("htpp://"+Context.Request.Host.ToString()+"/Stylesheet.css")" rel="stylesheet" />
+
+<div class="container mt-4">
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4 class="card-title">Participants:</h4>
+            @foreach(var item in Model.Knights)
+            {
+                <p>@item.Key - @item.Value</p>
+            }
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4 class="card-title">Start Date</h4>
+            <p class="card-text">@Model.Combat_StartDate</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4 class="card-title">End Date</h4>
+            <p class="card-text">@Model.Combat_EndDate</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4 class="card-title">Combat Type</h4>
+            <p class="card-text">@Model.Combat_Type</p>
+        </div>
+    </div>
+</div>

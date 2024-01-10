@@ -7,14 +7,14 @@
 
 <form method="post" asp-action="Create">
     <div class="form-group">
-        <label asp-for="Name">Name</label>
-        <input asp-for="Name" class="form-control" placeholder="Enter Name">
+        <label asp-for="Trophy_Name">Name</label>
+        <input asp-for="Trophy_Name" class="form-control" placeholder="Enter Name">
     </div><br>
     <div class="form-group">
-        <label asp-for="Value">Value</label>
-        <input type="number" asp-for="Value" class="form-control" placeholder="Value">
+        <label asp-for="Trophy_Value">Value</label>
+        <input type="number" asp-for="Trophy_Value" class="form-control" placeholder="Value">
     </div><br>
-    <input type="hidden" asp-for="RoundId" value="@Model.RoundId"/>
+    <input type="hidden" asp-for="Trophy_RoundId" value="@Model.Trophy_RoundId"/>
     <p class="text-danger">@creatingError</p>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

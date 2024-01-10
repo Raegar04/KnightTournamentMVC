@@ -1,0 +1,59 @@
+﻿@using KnightTournament.ViewModels;
+@model TournamentDetailsViewModelPDF
+
+@{
+    Layout = null;
+}
+
+<link href="@("htpp://"+Context.Request.Host.ToString()+"/Stylesheet.css")" rel="stylesheet" />
+
+<div class="container mt-4">
+    <h1 class="display-4">@Model.Tournament_Name</h1>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4 class="card-title">Tournament Winners:</h4>
+            @foreach (var item in Model.Winners)
+            {
+                <p>Round:@item.Key - @item.Value</p>
+            }
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4 class="card-title">Tournament Description</h4>
+            <p class="card-text">@Model.Tournament_Description</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4 class="card-title">Tournament Scope</h4>
+            <p class="card-text">@Model.Tournament_Scope</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4 class="card-title">Tournament Start Date</h4>
+            <p class="card-text">@Model.Tournament_StartDate</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4 class="card-title">Tournament Status</h4>
+            <p class="card-text">@Model.Tournament_Status</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4 class="card-title">Tournament Location</h4>
+            <p class="card-text">@Model.Tournament_Location.Location_Country</p>
+            <p class="card-text">@Model.Tournament_Location.Location_City</p>
+            <p class="card-text">@Model.Tournament_Location.Location_Place</p>
+        </div>
+    </div>
+</div>

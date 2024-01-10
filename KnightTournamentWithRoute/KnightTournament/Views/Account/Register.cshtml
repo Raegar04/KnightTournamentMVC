@@ -31,17 +31,17 @@
         </div><br />
     </div>
     <div class="form-group">
-        <label asp-for="Rank" class="col-md-2"></label>
+        <label asp-for="User_Rank" class="col-md-2"></label>
         <div class="col-md-10">
-            <select asp-for="Rank" asp-items="@Html.GetEnumSelectList<Rank>()" class="form-control">
+            <select asp-for="User_Rank" asp-items="@Html.GetEnumSelectList<Rank>()" class="form-control">
                 <option disabled selected>--Select Rank--</option>
             </select>
         </div><br />
     </div>
     <div class="form-group">
-        <label asp-for="Rating" class="col-md-2"></label>
+        <label asp-for="User_Rating" class="col-md-2"></label>
         <div class="col-md-10">
-            <input asp-for="Rating" type="number" class="form-control"/>
+            <input asp-for="User_Rating" type="number" class="form-control"/>
         </div><br />
     </div>
     <div class="form-group">

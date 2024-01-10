@@ -27,7 +27,7 @@ namespace KnightTournament.Controllers
             var tournament = (await _tournamentService.GetByIdAsync(tournamentId)).Data;
             var getUserIdResult = User.GetUserIdFromPrincipal();
             var userId = getUserIdResult.Data;
-            await _tournamentUserService.AddAsync(new TournamentUsers() { TournamentId = tournamentId, KnightId = userId });
+            await _tournamentUserService.AddAsync(new TournamentUsers() { TournamentUsers_TournamentId = tournamentId, TournamentUsers_KnightId = userId });
             await _combatKnightService.AddUserToCombats(tournament, userId);
             return RedirectToAction("Display", "Tournament");
         }

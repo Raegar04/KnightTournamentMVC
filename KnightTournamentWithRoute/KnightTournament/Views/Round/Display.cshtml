@@ -86,7 +86,7 @@
     @foreach (var round in Model.Entities)
     {
         var trophy = round.Round_Trophy;
-        var isHolded = resultHolderId.Data == tournament.HolderId;
+        var isHolded = resultHolderId.Data == tournament.Tournament_HolderId;
         <div class="tournament-item">
             <div>
                 
@@ -113,11 +113,11 @@
                 {
                     <div>
                         <h4>Round's Trophy</h4>
-                        <h6>@trophy.Name</h6>
-                        <p>Value: @trophy.Value</p>
+                        <h6>@trophy.Trophy_Name</h6>
+                        <p>Value: @trophy.Trophy_Value</p>
                         @if (isHolded)
                         {
-                                                    <a class=" btn btn-outline-primary" asp-controller="Trophy" asp-action="Delete" asp-route-id="@trophy.Id">Remove out of round</a>
+                                                    <a class=" btn btn-outline-primary" asp-controller="Trophy" asp-action="Delete" asp-route-id="@trophy.Trophy_Id">Remove out of round</a>
 
                         }
                     </div>

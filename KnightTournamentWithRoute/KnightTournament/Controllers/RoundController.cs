@@ -22,18 +22,18 @@ namespace KnightTournament.Controllers
         [HttpGet("Display")]
         public async Task<IActionResult> Display(Guid tournamentId)
         {
-            //var tournamentId = TempData["TournamentId"];
+            //var tournamentId = TempData["TournamentUsers_TournamentId"];
             var getResult = await _roundService.GetAllAsync(round => round.Round_TournamentId.ToString() == tournamentId.ToString());
             var displayRoundsViewModel = new DisplayViewModel<Round>()
             {
                 Entities = (ICollection<Round>)getResult.Data,
                 SearchItems = new List<string>()
                 {
-                    "All", "Name", "Description"
+                    "All", "Round_Name", "Round_Description"
                 },
                 FilterItems = new List<string>()
                 {
-                    "StartDate", "EndDate"
+                    "Round_StartDate", "Round_EndDate"
                 }
             };
             ViewBag.tournamentId = tournamentId;
@@ -43,7 +43,7 @@ namespace KnightTournament.Controllers
         [HttpGet("Create")]
         public IActionResult Create(Guid tournamentId)
         {
-            var roundDetailViewModel = new RoundDetailsViewModel() { TournamentId = tournamentId };
+            var roundDetailViewModel = new RoundDetailsViewModel() { Round_TournamentId = tournamentId };
             if (TempData.ContainsKey("Error"))
             {
                 roundDetailViewModel.ErrorMessage = TempData["Error"].ToString();
@@ -116,11 +116,11 @@ namespace KnightTournament.Controllers
             displayViewModel.Entities = (ICollection<Round>)res.Data;
             displayViewModel.SearchItems = new List<string>()
                 {
-                    "All", "Name", "Description"
+                    "All", "Round_Name", "Round_Description"
                 };
             displayViewModel.FilterItems = new List<string>()
                 {
-                    "StartDate", "EndDate"
+                    "Round_StartDate", "Round_EndDate"
                 };
             ViewBag.tournamentId = tournamentId;
             return View("Display", displayViewModel);
@@ -133,11 +133,11 @@ namespace KnightTournament.Controllers
             displayViewModel.Entities = (ICollection<Round>)res.Data;
             displayViewModel.SearchItems = new List<string>()
                 {
-                    "All", "Name", "Description"
+                    "All", "Round_Name", "Round_Description"
                 };
             displayViewModel.FilterItems = new List<string>()
                 {
-                    "StartDate", "EndDate"
+                    "Round_StartDate", "Round_EndDate"
                 };
             ViewBag.tournamentId = tournamentId;
             return View("Display", displayViewModel);

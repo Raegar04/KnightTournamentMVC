@@ -3,26 +3,26 @@
 
 <form method="post" asp-action="Create" asp-controller="Round">
     <div class="form-group">
-        <label asp-for="Name">Title</label>
-        <input asp-for="Name" class="form-control" placeholder="Enter title">
+        <label asp-for="Round_Name">Title</label>
+        <input asp-for="Round_Name" class="form-control" placeholder="Enter title">
     </div><br>
     <div class="form-group">
-        <label asp-for="Description">Description</label>
-        <input asp-for="Description" class="form-control" placeholder="Description">
+        <label asp-for="Round_Description">Description</label>
+        <input asp-for="Round_Description" class="form-control" placeholder="Description">
     </div><br>
     <div class="form-group">
-        <label asp-for="StartDate">Start Date</label> 
-        <input asp-for="StartDate" class="form-control" placeholder="Start Date">
+        <label asp-for="Round_StartDate">Start Date</label> 
+        <input asp-for="Round_StartDate" class="form-control" placeholder="Start Date">
     </div><br>
     <div class="form-group">
-        <label asp-for="EndDate">End Date</label>
-        <input asp-for="EndDate" class="form-control" placeholder="End Date">
+        <label asp-for="Round_EndDate">End Date</label>
+        <input asp-for="Round_EndDate" class="form-control" placeholder="End Date">
     </div><br>
     @if (Model.ErrorMessage is not null)
     {
         <p>@Model.ErrorMessage</p>
         <br>
     }
-    <input asp-for="TournamentId" type="hidden" value="@Model.TournamentId" />
+    <input asp-for="Round_TournamentId" type="hidden" value="@Model.Round_TournamentId" />
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

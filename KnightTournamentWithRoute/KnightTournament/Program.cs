@@ -4,11 +4,12 @@ using KnightTournament.DAL;
 using KnightTournament.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<ApplicationDbContext>();
+builder.Services.AddDbContext<ApplicationDbContext>(options=>options.UseLazyLoadingProxies(true).UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddScoped<LocationService>();
 builder.Services.AddScoped<TrophyService>();
@@ -24,6 +25,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>().AddEntityFrameworkStores<ApplicationDbContext>().AddUserStore<UserStore<AppUser, IdentityRole<Guid>, ApplicationDbContext, Guid>>();
 
 var app = builder.Build();
+
+Rotativa.AspNetCore.RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -49,7 +52,7 @@ app.MapControllerRoute(
 //    endpoints.MapControllerRoute(
 //        name: "rounds",
 //        pattern: "tournament/{tournamentId}/round/{action=Index}/{id?}",
-//        defaults: new { controller = "Round" }
+//        defaults: new { controller = "Trophy_Round" }
 //    );
 //});
 

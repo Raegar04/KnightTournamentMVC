@@ -8,24 +8,24 @@
 
 <form method="post" asp-action="Create">
     <div class="form-group">
-        <label asp-for="Name">Title</label>
-        <input asp-for="Name" class="form-control" placeholder="Enter title">
+        <label asp-for="Tournament_Name">Title</label>
+        <input asp-for="Tournament_Name" class="form-control" placeholder="Enter title">
     </div><br>
     <div class="form-group">
-        <label asp-for="Description">Description</label>
-        <textarea asp-for ="Description" class="form-control" placeholder="Description"></textarea>
+        <label asp-for="Tournament_Description">Description</label>
+        <textarea asp-for ="Tournament_Description" class="form-control" placeholder="Description"></textarea>
     </div><br>
     <div class="form-group">
-        <label asp-for="Scope">Scope</label>
-        <input asp-for="Scope" class="form-control" placeholder="Scope">
+        <label asp-for="Tournament_Scope">Scope</label>
+        <input asp-for="Tournament_Scope" class="form-control" placeholder="Scope">
     </div><br> 
     <div class="form-group">
-        <label asp-for="StartDate">Start Date</label> 
-        <input asp-for="StartDate" class="form-control" placeholder="Start Date">
+        <label asp-for="Tournament_StartDate">Start Date</label> 
+        <input asp-for="Tournament_StartDate" class="form-control" placeholder="Start Date">
     </div><br>
     <div class="form-group">
         <label for="selectedEntity">Select an Entity:</label>
-        <select class="form-control" asp-for="LocationId">
+        <select class="form-control" asp-for="Tournament_LocationId">
             <option value="">-- Select --</option>
             @foreach (var entity in locations)
             {

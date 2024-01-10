@@ -1,11 +1,11 @@
 ﻿@using KnightTournament.BLL.Implementations;
 @using KnightTournament.ViewModels;
-@model DisplayViewModel<CombatDetailsViewModel>
+@model DisplayViewModel<ResultsCombatPDF>
 @inject RoundService _roundService;
 @inject CombatService _combatService;
 @{
     var round = (await _roundService.GetByIdAsync(ViewBag.roundId)).Data;
-    var isHolder = await _combatService.IsHolder(round.Id, User);
+    var isHolder = await _combatService.IsHolder(round.Round_Id, User);
     var showOverlay = false;
 }
 <style>
@@ -30,7 +30,7 @@
 </style>
 <div>
     <p>
-        <a asp-action="Display" asp-controller="Round" asp-route-tournamentId="@round.TournamentId" class="btn btn-primary"><span>&#10094; </span>Back to rounds</a>
+        <a asp-action="Display" asp-controller="Round" asp-route-tournamentId="@round.Round_TournamentId" class="btn btn-primary"><span>&#10094; </span>Back to rounds</a>
 
         @if (isHolder)
         {
@@ -44,21 +44,23 @@
     {
         <div style="display:inline-flex; ">
             <div class="tournament-item">
-                <h2>@combat.Type</h2>
-                <p>Start Date:@combat.StartDate</p>
-                <p>End Date:@combat.EndDate</p>
+                <h2>@combat.Combat_Type</h2>
+                <p>Start Date:@combat.Combat_StartDate</p>
+                <p>End Date:@combat.Combat_EndDate</p>
                 @if (isHolder)
                 {
                     <div class="operations">
-                        <a asp-controller="Combat" asp-action="Delete" asp-route-id="@combat.Id" asp-route-roundId="@combat.RoundId" class="btn btn-danger">Delete</a>
-                        <a asp-controller="Combat" asp-action="Update" asp-route-id="@combat.Id" asp-route-roundId="@combat.RoundId" class="btn btn-primary">Update</a>
-                        @if (combat.IsFinished)
+                        <a asp-controller="Combat" asp-action="Delete" asp-route-id="@combat.Combat_Id" asp-route-roundId="@combat.Combat_RoundId" class="btn btn-danger">Delete</a>
+                        <a asp-controller="Combat" asp-action="Update" asp-route-id="@combat.Combat_Id" asp-route-roundId="@combat.Combat_RoundId" class="btn btn-primary">Update</a>
+                        @if (combat.Combat_IsFinished)
                         {
                             <span class="btn btn-dark">Finished</span>
+                            <a asp-controller="Combat" asp-action="LoadPDF" asp-route-combatId="@combat.Combat_Id" class="btn btn-dark">Load results</a>
+
                         }
                         else
                         {
-                                                       <a asp-controller="Combat" asp-action="Finish" asp-route-id="@combat.Id"  class="btn btn-dark">Finish</a>
+                             <a asp-controller="Combat" asp-action="Finish" asp-route-id="@combat.Combat_Id"  class="btn btn-dark">Finish</a>
  
                         }
 

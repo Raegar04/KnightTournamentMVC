@@ -1,9 +1,11 @@
 ﻿using KnightTournament.Models.Enums;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KnightTournament.Models
 {
     [Serializable]
+    [PrimaryKey("Combat_Id")]
     public class Combat
     {
         public Guid Combat_Id { get; set; } = Guid.NewGuid();

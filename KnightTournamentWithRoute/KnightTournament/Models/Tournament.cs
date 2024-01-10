@@ -1,9 +1,11 @@
 ﻿using KnightTournament.Attributes;
 using KnightTournament.Models.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace KnightTournament.Models
 {
     [Serializable]
+    [PrimaryKey("Tournament_Id")]
     public class Tournament
     {
         public Guid Tournament_Id { get; set; } = Guid.NewGuid();
@@ -15,8 +17,6 @@ namespace KnightTournament.Models
         public int Tournament_Scope { get; set; }
 
         public DateTime Tournament_StartDate { get; set; }
-
-        public bool Tournament_IsFinished { get; set; } = false;
 
         public Status Tournament_Status { get; set; } = Status.Planned;
 

@@ -1,5 +1,8 @@
-﻿namespace KnightTournament.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace KnightTournament.Models
 {
+    [PrimaryKey("Location_Id")]
     public class Location
     {
         public Guid Location_Id { get; set; } = Guid.NewGuid();

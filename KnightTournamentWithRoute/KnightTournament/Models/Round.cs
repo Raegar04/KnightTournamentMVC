@@ -1,8 +1,11 @@
 ﻿
 
+using Microsoft.EntityFrameworkCore;
+
 namespace KnightTournament.Models
 {
     [Serializable]
+    [PrimaryKey("Round_Id")]
     public class Round
     {
         public Guid Round_Id { get; set; } = Guid.NewGuid();

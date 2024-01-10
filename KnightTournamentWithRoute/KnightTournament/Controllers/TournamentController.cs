@@ -1,4 +1,5 @@
 ﻿using KnightTournament.BLL.Implementations;
+using KnightTournament.DAL;
 using KnightTournament.Extensions;
 using KnightTournament.Helpers;
 using KnightTournament.Models;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
+using Rotativa.AspNetCore;
 
 namespace KnightTournament.Controllers
 {
@@ -19,12 +21,13 @@ namespace KnightTournament.Controllers
         private readonly TournamentService _tournamentService;
         private readonly UserManager<AppUser> _userManager;
         private readonly TournamentUserService _tournamentUserService;
-
-        public TournamentController(TournamentService tournamentService, UserManager<AppUser> userManager, TournamentUserService tournamentUserService)
+        private readonly ApplicationDbContext _context;
+        public TournamentController(TournamentService tournamentService, UserManager<AppUser> userManager, TournamentUserService tournamentUserService, ApplicationDbContext applicationDbContext)
         {
             _tournamentService = tournamentService;
             _userManager = userManager;
             _tournamentUserService = tournamentUserService;
+            _context = applicationDbContext;
         }
 
         [Authorize]
@@ -37,11 +40,11 @@ namespace KnightTournament.Controllers
                 Entities = (ICollection<Tournament>)getResult.Data,
                 SearchItems = new List<string>()
                 {
-                    "All", "Name", "Description", "Status", "Location"
+                    "All", "Tournament_Name", "Tournament_Description", "Tournament_Status", "Tournament_Location"
                 },
                 FilterItems = new List<string>()
                 {
-                    "Scope", "StartDate"
+                    "Tournament_Scope", "Tournament_StartDate"
                 }
             };
 
@@ -75,11 +78,11 @@ namespace KnightTournament.Controllers
             displayViewModel.Entities = (ICollection<Tournament>)res.Data;
             displayViewModel.SearchItems = new List<string>()
                 {
-                    "All", "Name", "Description", "Status", "Location"
+                    "All", "Tournament_Name", "Tournament_Description", "Tournament_Status", "Tournament_Location"
                 };
             displayViewModel.FilterItems = new List<string>()
                 {
-                    "Scope", "StartDate"
+                    "Tournament_Scope", "Tournament_StartDate"
                 };
             return View("Display", displayViewModel);
         }
@@ -91,11 +94,11 @@ namespace KnightTournament.Controllers
             displayViewModel.Entities = (ICollection<Tournament>)res.Data;
             displayViewModel.SearchItems = new List<string>()
                 {
-                    "All", "Name", "Description", "Status", "Location"
+                    "All", "Tournament_Name", "Tournament_Description", "Tournament_Status", "Tournament_Location"
                 };
             displayViewModel.FilterItems = new List<string>()
                 {
-                    "Scope", "StartDate"
+                    "Tournament_Scope", "Tournament_StartDate"
                 };
             return View("Display", displayViewModel);
         }
@@ -165,6 +168,51 @@ namespace KnightTournament.Controllers
             await _tournamentService.Finish(tournament);
 
             return RedirectToAction("Display", "Tournament");
+        }
+
+        [HttpGet("LoadPDF")]
+        public async Task<IActionResult> LoadPDF(Guid tournamentId)
+        {
+            var tournament = (await _tournamentService.GetByIdAsync(tournamentId)).Data;
+            var vm = new TournamentDetailsViewModelPDF();
+            tournament.MapTo(ref vm);
+            vm.Winners = new Dictionary<string, string>();
+            foreach (var item in tournament.Tournament_Rounds)
+            {
+                if (item.Round_Trophy != null && item.Round_Trophy.Trophy_KnightId != null)
+                {
+                    var user = await _userManager.FindByIdAsync(item.Round_Trophy.Trophy_KnightId.ToString());
+                    vm.Winners.Add(item.Round_Name, user.UserName);
+                }
+
+            }
+
+            return new ViewAsPdf("ResultsTournamentPDF", vm);
+        }
+
+        [HttpGet("ByTrophies")]
+        public async Task<IActionResult> ByTrophies()
+        {
+            var tournaments = await _context.GetTournamentsWithMostValuableTrophies();
+            var res = new List<Tournament>();
+            foreach (var item in tournaments)
+            {
+                res.Add((await _tournamentService.GetByIdAsync(item)).Data);
+            }
+            var displayTournamentsViewModel = new DisplayViewModel<Tournament>()
+            {
+                Entities = (ICollection<Tournament>)res,
+                SearchItems = new List<string>()
+                {
+                    "All", "Tournament_Name", "Tournament_Description", "Tournament_Status", "Tournament_Location"
+                },
+                FilterItems = new List<string>()
+                {
+                    "Tournament_Scope", "Tournament_StartDate"
+                }
+            };
+
+            return View("Display", displayTournamentsViewModel);
         }
     }
 }

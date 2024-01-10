@@ -5,10 +5,10 @@ namespace KnightTournament.ViewModels
 {
     public class TrophyDetailsViewModel
     {
-        public string Name { get; set; }
+        public string Trophy_Name { get; set; }
 
-        public double Value { get; set; }
+        public double Trophy_Value { get; set; }
 
-        public Guid RoundId { get; set; }
+        public Guid Trophy_RoundId { get; set; }
     }
 }

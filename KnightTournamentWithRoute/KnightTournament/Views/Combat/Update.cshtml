@@ -1,19 +1,19 @@
 ﻿@using KnightTournament.Models.Enums;
 @using KnightTournament.ViewModels;
-@model CombatDetailsViewModel;
+@model ResultsCombatPDF;
 
 <form method="post" asp-action="Update" asp-controller="Combat">
     <div class="form-group">
-        <label asp-for="StartDate"></label>
-        <input asp-for="StartDate" class="form-control" placeholder="@Model.StartDate"/>
+        <label asp-for="Combat_StartDate"></label>
+        <input asp-for="Combat_StartDate" class="form-control" placeholder="@Model.Combat_StartDate"/>
     </div>
     <div class="form-group">
-        <label asp-for="EndDate"></label>
-        <input asp-for="EndDate" class="form-control" placeholder="@Model.EndDate" />
+        <label asp-for="Combat_EndDate"></label>
+        <input asp-for="Combat_EndDate" class="form-control" placeholder="@Model.Combat_EndDate" />
     </div>
     <div class="form-group">
-        <label asp-for="Type"></label>
-        <select asp-for="Type" asp-items="Html.GetEnumSelectList<CombatType>()" class="form-control">
+        <label asp-for="Combat_Type"></label>
+        <select asp-for="Combat_Type" asp-items="Html.GetEnumSelectList<CombatType>()" class="form-control">
             <option value="">Select Combat Type</option>
         </select>
     </div>
@@ -22,7 +22,7 @@
         <p>@Model.ErrorMessage</p>
         <br>
     }
-    <input asp-for="Id" type="hidden" value="@Model.Id" />
-    <input asp-for="RoundId" type="hidden" value="@Model.RoundId" />
+    <input asp-for="Combat_Id" type="hidden" value="@Model.Combat_Id" />
+    <input asp-for="Combat_RoundId" type="hidden" value="@Model.Combat_RoundId" />
     <button type="submit" class="btn btn-primary">Update</button>
 </form>

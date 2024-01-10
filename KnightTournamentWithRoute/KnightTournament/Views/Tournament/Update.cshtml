@@ -4,34 +4,34 @@
 
 <form method="post" asp-action="Update" asp-controller="Tournament">
     <div class="form-group">
-        <label asp-for="Name">Title</label>
-        <input asp-for="Name" class="form-control" placeholder="@Model.Name">
+        <label asp-for="Tournament_Name">Title</label>
+        <input asp-for="Tournament_Name" class="form-control" placeholder="@Model.Tournament_Name">
     </div><br>
     <div class="form-group">
-        <label asp-for="Description">Description</label>
-        <input asp-for="Description" class="form-control" placeholder="@Model.Description">
+        <label asp-for="Tournament_Description">Description</label>
+        <input asp-for="Tournament_Description" class="form-control" placeholder="@Model.Tournament_Description">
     </div><br>
     <div class="form-group">
-        <label asp-for="Scope">Scope</label>
-        <input asp-for="Scope" class="form-control" placeholder="@Model.Scope">
+        <label asp-for="Tournament_Scope">Scope</label>
+        <input asp-for="Tournament_Scope" class="form-control" placeholder="@Model.Tournament_Scope">
     </div><br> 
     <div class="form-group">
-        <label asp-for="StartDate">Start Date</label> 
-        <input asp-for="StartDate" class="form-control" placeholder="@Model.StartDate">
+        <label asp-for="Tournament_StartDate">Start Date</label> 
+        <input asp-for="Tournament_StartDate" class="form-control" placeholder="@Model.Tournament_StartDate">
     </div><br>
     <div class="form-group">
-        <label asp-for="Status"></label>
-        <select asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()" class="form-control">
+        <label asp-for="Tournament_Status"></label>
+        <select asp-for="Tournament_Status" asp-items="Html.GetEnumSelectList<Status>()" class="form-control">
             <option value="">Select Combat Type</option>
         </select>
     </div>
-    <input type="hidden" asp-for="LocationId" value="@Model.LocationId"/>
-    <input type="hidden" asp-for="HolderId" value="@Model.HolderId" />
+    <input type="hidden" asp-for="Tournament_LocationId" value="@Model.Tournament_LocationId"/>
+    <input type="hidden" asp-for="Tournament_HolderId" value="@Model.Tournament_HolderId" />
     @if (Model.ErrorMessage is not null)
     {
         <p>@Model.ErrorMessage</p>
         <br>
     }
-    <input asp-for="Id" class="form-control" value="@Model.Id" type="hidden" />
+    <input asp-for="Tournament_Id" class="form-control" value="@Model.Tournament_Id" type="hidden" />
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

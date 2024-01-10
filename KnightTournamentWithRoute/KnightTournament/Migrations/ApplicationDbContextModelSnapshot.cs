@@ -27,7 +27,7 @@ namespace KnightTournament.Migrations
 
             modelBuilder.Entity("KnightTournament.Models.AppUser", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Round_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -68,12 +68,6 @@ namespace KnightTournament.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Rank")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -84,7 +78,13 @@ namespace KnightTournament.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("User_Rank")
+                        .HasColumnType("int");
+
+                    b.Property<int>("User_Rating")
+                        .HasColumnType("int");
+
+                    b.HasKey("Round_Id");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -99,201 +99,197 @@ namespace KnightTournament.Migrations
 
             modelBuilder.Entity("KnightTournament.Models.Combat", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Combat_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime>("Combat_EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsFinished")
+                    b.Property<bool>("Combat_IsFinished")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("RoundId")
+                    b.Property<Guid>("Combat_RoundId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime>("Combat_StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Type")
+                    b.Property<int>("Combat_Type")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("Combat_Id");
 
-                    b.HasIndex("RoundId");
+                    b.HasIndex("Combat_RoundId");
 
                     b.ToTable("Combats");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.CombatsKnight", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CombatsKnight_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AppUserId")
+                    b.Property<Guid?>("CombatsKnight_AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CombatsKnight_CombatId")
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CombatId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Points")
+                    b.Property<int>("CombatsKnight_Points")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CombatsKnight_Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("CombatsKnight_AppUserId");
 
-                    b.HasIndex("CombatId");
+                    b.HasIndex("CombatsKnight_CombatId");
 
                     b.ToTable("CombatsKnights", (string)null);
                 });
 
             modelBuilder.Entity("KnightTournament.Models.Location", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Location_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("City")
+                    b.Property<string>("Location_City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Country")
+                    b.Property<string>("Location_Country")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImgUri")
+                    b.Property<string>("Location_ImgUri")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Place")
+                    b.Property<string>("Location_Place")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Location_Id");
 
                     b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.Round", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Round_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Round_Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime>("Round_EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Round_Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime>("Round_StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("TournamentId")
+                    b.Property<Guid>("Round_TournamentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("Round_Id");
 
-                    b.HasIndex("TournamentId");
+                    b.HasIndex("Round_TournamentId");
 
                     b.ToTable("Rounds");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.Tournament", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Tournament_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Tournament_Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("HolderId")
+                    b.Property<Guid>("Tournament_HolderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsFinished")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("LocationId")
+                    b.Property<Guid?>("Tournament_LocationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Tournament_Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Scope")
+                    b.Property<int>("Tournament_Scope")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime>("Tournament_StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("Tournament_Status")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("Tournament_Id");
 
-                    b.HasIndex("HolderId");
+                    b.HasIndex("Tournament_HolderId");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("Tournament_LocationId");
 
                     b.ToTable("Tournaments");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.TournamentUsers", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("TournamentUsers_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("KnightId")
+                    b.Property<Guid>("TournamentUsers_KnightId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TournamentId")
+                    b.Property<Guid>("TournamentUsers_TournamentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("TournamentUsers_Id");
 
-                    b.HasIndex("KnightId");
+                    b.HasIndex("TournamentUsers_KnightId");
 
-                    b.HasIndex("TournamentId");
+                    b.HasIndex("TournamentUsers_TournamentId");
 
                     b.ToTable("TournamentUsers", (string)null);
                 });
 
             modelBuilder.Entity("KnightTournament.Models.Trophy", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Trophy_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("KnightId")
+                    b.Property<Guid?>("Trophy_KnightId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Trophy_Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoundId")
+                    b.Property<Guid>("Trophy_RoundId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Value")
+                    b.Property<double>("Trophy_Value")
                         .HasColumnType("float");
 
-                    b.HasKey("Id");
+                    b.HasKey("Trophy_Id");
 
-                    b.HasIndex("KnightId");
+                    b.HasIndex("Trophy_KnightId");
 
-                    b.HasIndex("RoundId")
+                    b.HasIndex("Trophy_RoundId")
                         .IsUnique();
 
                     b.ToTable("Trophies");
@@ -301,7 +297,7 @@ namespace KnightTournament.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("Round_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -317,7 +313,7 @@ namespace KnightTournament.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Round_Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -329,11 +325,11 @@ namespace KnightTournament.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Round_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Round_Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -344,7 +340,7 @@ namespace KnightTournament.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("Round_Id");
 
                     b.HasIndex("RoleId");
 
@@ -353,11 +349,11 @@ namespace KnightTournament.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Round_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Round_Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -368,7 +364,7 @@ namespace KnightTournament.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("Round_Id");
 
                     b.HasIndex("UserId");
 
@@ -432,96 +428,95 @@ namespace KnightTournament.Migrations
 
             modelBuilder.Entity("KnightTournament.Models.Combat", b =>
                 {
-                    b.HasOne("KnightTournament.Models.Round", "Round")
-                        .WithMany("Combats")
-                        .HasForeignKey("RoundId")
+                    b.HasOne("KnightTournament.Models.Round", "Combat_Round")
+                        .WithMany("Round_Combats")
+                        .HasForeignKey("Combat_RoundId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Round");
+                    b.Navigation("Combat_Round");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.CombatsKnight", b =>
                 {
-                    b.HasOne("KnightTournament.Models.AppUser", "Knight")
+                    b.HasOne("KnightTournament.Models.AppUser", "CombatsKnight_Knight")
                         .WithMany()
-                        .HasForeignKey("AppUserId")
+                        .HasForeignKey("CombatsKnight_AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("KnightTournament.Models.Combat", "CombatsKnight_Combat")
+                        .WithMany()
+                        .HasForeignKey("CombatsKnight_CombatId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("KnightTournament.Models.Combat", "Combat")
-                        .WithMany()
-                        .HasForeignKey("CombatId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.Navigation("CombatsKnight_Combat");
 
-                    b.Navigation("Combat");
-
-                    b.Navigation("Knight");
+                    b.Navigation("CombatsKnight_Knight");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.Round", b =>
                 {
-                    b.HasOne("KnightTournament.Models.Tournament", "Tournament")
-                        .WithMany("Rounds")
-                        .HasForeignKey("TournamentId")
+                    b.HasOne("KnightTournament.Models.Tournament", "Round_Tournament")
+                        .WithMany("Tournament_Rounds")
+                        .HasForeignKey("Round_TournamentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Tournament");
+                    b.Navigation("Round_Tournament");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.Tournament", b =>
                 {
-                    b.HasOne("KnightTournament.Models.AppUser", "Holder")
-                        .WithMany("HoldedTournaments")
-                        .HasForeignKey("HolderId")
+                    b.HasOne("KnightTournament.Models.AppUser", "Tournament_User")
+                        .WithMany("User_HoldedTournaments")
+                        .HasForeignKey("Tournament_HolderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KnightTournament.Models.Location", "Location")
-                        .WithMany("Tournaments")
-                        .HasForeignKey("LocationId");
+                    b.HasOne("KnightTournament.Models.Location", "Tournament_Location")
+                        .WithMany("Location_Tournaments")
+                        .HasForeignKey("Tournament_LocationId");
 
-                    b.Navigation("Holder");
+                    b.Navigation("Tournament_Location");
 
-                    b.Navigation("Location");
+                    b.Navigation("Tournament_User");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.TournamentUsers", b =>
                 {
-                    b.HasOne("KnightTournament.Models.AppUser", "Knight")
+                    b.HasOne("KnightTournament.Models.AppUser", "TournamentUsers_Knight")
                         .WithMany()
-                        .HasForeignKey("KnightId")
+                        .HasForeignKey("TournamentUsers_KnightId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("KnightTournament.Models.Tournament", "Tournament")
+                    b.HasOne("KnightTournament.Models.Tournament", "TournamentUsers_Tournament")
                         .WithMany()
-                        .HasForeignKey("TournamentId")
+                        .HasForeignKey("TournamentUsers_TournamentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Knight");
+                    b.Navigation("TournamentUsers_Knight");
 
-                    b.Navigation("Tournament");
+                    b.Navigation("TournamentUsers_Tournament");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.Trophy", b =>
                 {
-                    b.HasOne("KnightTournament.Models.AppUser", "Knight")
-                        .WithMany("Trophies")
-                        .HasForeignKey("KnightId");
+                    b.HasOne("KnightTournament.Models.AppUser", "Trophy_Knight")
+                        .WithMany("User_Trophies")
+                        .HasForeignKey("Trophy_KnightId");
 
-                    b.HasOne("KnightTournament.Models.Round", "Round")
-                        .WithOne("Trophy")
-                        .HasForeignKey("KnightTournament.Models.Trophy", "RoundId")
+                    b.HasOne("KnightTournament.Models.Round", "Trophy_Round")
+                        .WithOne("Round_Trophy")
+                        .HasForeignKey("KnightTournament.Models.Trophy", "Trophy_RoundId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Knight");
+                    b.Navigation("Trophy_Knight");
 
-                    b.Navigation("Round");
+                    b.Navigation("Trophy_Round");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -577,27 +572,27 @@ namespace KnightTournament.Migrations
 
             modelBuilder.Entity("KnightTournament.Models.AppUser", b =>
                 {
-                    b.Navigation("HoldedTournaments");
+                    b.Navigation("User_HoldedTournaments");
 
-                    b.Navigation("Trophies");
+                    b.Navigation("User_Trophies");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.Location", b =>
                 {
-                    b.Navigation("Tournaments");
+                    b.Navigation("Location_Tournaments");
                 });
 
             modelBuilder.Entity("KnightTournament.Models.Round", b =>
                 {
-                    b.Navigation("Combats");
+                    b.Navigation("Round_Combats");
 
-                    b.Navigation("Trophy")
+                    b.Navigation("Round_Trophy")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("KnightTournament.Models.Tournament", b =>
                 {
-                    b.Navigation("Rounds");
+                    b.Navigation("Tournament_Rounds");
                 });
 #pragma warning restore 612, 618
         }

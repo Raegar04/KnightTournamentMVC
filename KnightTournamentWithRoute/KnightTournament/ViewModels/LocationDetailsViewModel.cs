@@ -4,12 +4,12 @@ namespace KnightTournament.ViewModels
 {
     public class LocationDetailsViewModel
     {
-        public string Country { get; set; }
+        public string Location_Country { get; set; }
 
-        public string City { get; set; }
+        public string Location_City { get; set; }
 
-        public string Place { get; set; }
+        public string Location_Place { get; set; }
 
-        public string ImgUri { get; set; }
+        public string Location_ImgUri { get; set; }
     }
 }

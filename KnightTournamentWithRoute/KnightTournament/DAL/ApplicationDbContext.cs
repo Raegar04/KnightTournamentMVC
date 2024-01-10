@@ -14,17 +14,27 @@ namespace KnightTournament.DAL
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseLazyLoadingProxies(true).UseSqlServer(GetConString());
+
+        public async Task<IEnumerable<Guid>> GetTournamentsWithMostValuableTrophies(int? limit = 10) 
+        {
+            var tournaments = Database.SqlQueryRaw<Guid>($"EXEC GetTournamentsWithMostValuableTrophies @limit = {limit}");
+            return await tournaments.ToListAsync();
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Round>().HasOne(e => e.Round_Trophy).WithOne(e => e.Round);
-            builder.Entity<Location>().HasMany(e => e.Location_Tournaments).WithOne(e => e.Tournament_Location).IsRequired(false);
+            builder.Entity<Combat>().HasOne(e => e.Combat_Round).WithMany(e => e.Round_Combats).HasForeignKey(e => e.Combat_RoundId);
+
+            builder.Entity<Tournament>().HasOne(e => e.Tournament_Location).WithMany(e => e.Location_Tournaments).HasForeignKey(e => e.Tournament_LocationId);
+
+            builder.Entity<Round>().HasOne(e => e.Round_Tournament).WithMany(e => e.Tournament_Rounds).HasForeignKey(e => e.Round_TournamentId);
             builder.Entity<Tournament>().HasOne(e => e.Tournament_Location).WithMany(e => e.Location_Tournaments).HasForeignKey(e => e.Tournament_LocationId).IsRequired(false);
 
-            builder.Entity<AppUser>().HasMany(e => e.User_Trophies).WithOne(e => e.Knight).IsRequired(false);
-            builder.Entity<Trophy>().HasOne(e => e.Knight).WithMany(e => e.User_Trophies).HasForeignKey(e => e.KnightId).IsRequired(false);
+            builder.Entity<Tournament>().HasOne(e => e.Tournament_User).WithMany(e => e.User_HoldedTournaments).HasForeignKey(e => e.Tournament_HolderId);
+
+            builder.Entity<Trophy>().HasOne(e => e.Trophy_Round).WithOne(e => e.Round_Trophy).HasForeignKey<Trophy>(e => e.Trophy_RoundId);
+
+            builder.Entity<Trophy>().HasOne(e => e.Trophy_Knight).WithMany(e => e.User_Trophies).HasForeignKey(e => e.Trophy_KnightId).IsRequired(false);
 
             builder.Entity<Tournament>().HasOne(e => e.Tournament_User).WithMany(e => e.User_HoldedTournaments).HasForeignKey(e => e.Tournament_HolderId);
 
@@ -32,17 +42,17 @@ namespace KnightTournament.DAL
            .HasMany(t => t.Tournament_Knights)
            .WithMany(u => u.User_Tournaments)
             .UsingEntity<TournamentUsers>(
-                j => j.HasOne(tu => tu.Knight)
+                j => j.HasOne(tu => tu.TournamentUsers_Knight)
                     .WithMany()
-                    .HasForeignKey(tu => tu.KnightId)
+                    .HasForeignKey(tu => tu.TournamentUsers_KnightId)
                     .OnDelete(DeleteBehavior.Restrict),
-                j => j.HasOne(tu => tu.Tournament)
+                j => j.HasOne(tu => tu.TournamentUsers_Tournament)
                     .WithMany()
-                    .HasForeignKey(tu => tu.TournamentId)
+                    .HasForeignKey(tu => tu.TournamentUsers_TournamentId)
                     .OnDelete(DeleteBehavior.Restrict),
                 j =>
                 {
-                    j.HasKey(tu => tu.Id);
+                    j.HasKey(tu => tu.TournamentUsers_Id);
                     j.ToTable("TournamentUsers");
                 }
             );
@@ -73,7 +83,7 @@ namespace KnightTournament.DAL
         {
             var builder = new ConfigurationBuilder();
             builder.SetBasePath(Directory.GetCurrentDirectory());
-            builder.AddJsonFile("appSettings.json");
+            builder.AddJsonFile("appSettings.Development.json");
             var config = builder.Build();
             return config.GetConnectionString("DefaultConnection");
         }

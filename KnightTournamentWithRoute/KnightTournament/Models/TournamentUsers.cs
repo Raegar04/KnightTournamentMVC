@@ -1,15 +1,18 @@
-﻿namespace KnightTournament.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace KnightTournament.Models
 {
+    [PrimaryKey("TournamentUsers_Id")]
     public class TournamentUsers
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid TournamentUsers_Id { get; set; } = Guid.NewGuid();
 
-        public virtual Guid TournamentId { get; set; }
+        public virtual Guid TournamentUsers_TournamentId { get; set; }
 
-        public virtual Tournament Tournament { get; set; }
+        public virtual Tournament TournamentUsers_Tournament { get; set; }
 
-        public virtual Guid KnightId { get; set; }
+        public virtual Guid TournamentUsers_KnightId { get; set; }
 
-        public virtual AppUser Knight { get; set; }
+        public virtual AppUser TournamentUsers_Knight { get; set; }
     }
 }
